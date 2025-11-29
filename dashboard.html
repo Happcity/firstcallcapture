@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - First Call Capture</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <img src="favicon.png" alt="First Call Capture Logo" class="w-8 h-8">
+                    <span class="text-2xl font-bold text-gray-900">First Call Capture</span>
+                </div>
+                <div>
+                    <span id="userEmail" class="text-sm text-gray-600 mr-4"></span>
+                    <button onclick="handleLogout()" class="text-sm text-gray-600 hover:text-gray-900">Sign Out</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Welcome Section -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">Welcome back!</h1>
+            <p class="text-gray-600">Manage your auto-reply settings and view your activity.</p>
+        </div>
+
+        <!-- Settings Card -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Auto-Reply Settings</h2>
+            
+            <form id="settingsForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Business Name</label>
+                    <input type="text" id="businessName" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                           placeholder="Your Business Name">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number (optional)</label>
+                    <input type="tel" id="phoneNumber" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                           placeholder="(555) 123-4567">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Website URL (optional)</label>
+                    <input type="url" id="websiteUrl" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                           placeholder="https://yourbusiness.com">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Auto-Reply Message</label>
+                    <textarea id="autoReplyMessage" rows="4"
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg resize-none"
+                              placeholder="Thanks for calling! We'll get back to you ASAP..."></textarea>
+                    <p class="text-xs text-gray-500 mt-1">This message will be sent to anyone who calls and you miss.</p>
+                </div>
+
+                <div id="saveMessage" class="hidden bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg text-sm">
+                    Settings saved successfully!
+                </div>
+
+                <button type="submit" 
+                        class="w-full px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">
+                    Save Settings
+                </button>
+            </form>
+        </div>
+
+        <!-- Status Card -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Service Status</h2>
+            <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                <div>
+                    <p class="font-medium text-yellow-800">Setup in Progress</p>
+                    <p class="text-sm text-yellow-600">Complete your settings above to activate auto-reply</p>
+                </div>
+                <span class="px-3 py-1 bg-yellow-200 text-yellow-800 rounded-full text-sm font-medium">Pending</span>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Initialize Supabase
+        const SUPABASE_URL = 'https://lhtrgutiqhqbnyfkdakd.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxodHJndXRpcWhxYm55ZmtkYWtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzODk5MzMsImV4cCI6MjA3OTk2NTkzM30._j4fSrw3ybuYgdqevI-Mj-UjnbGe8rvNEF0hqe2uKC0';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Check if user is logged in
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (!session) {
+                window.location.href = '/login.html';
+                return;
+            }
+            
+            // Display user email
+            document.getElementById('userEmail').textContent = session.user.email;
+            
+            // Load customer data
+            loadCustomerData(session.user.email);
+        }
+
+        // Load customer data from database
+        async function loadCustomerData(email) {
+            const { data, error } = await supabase
+                .from('customers')
+                .select('*')
+                .eq('email', email)
+                .single();
+            
+            if (data) {
+                document.getElementById('businessName').value = data.business_name || '';
+                document.getElementById('phoneNumber').value = data.phone_number || '';
+                document.getElementById('websiteUrl').value = data.website_url || '';
+                document.getElementById('autoReplyMessage').value = data.auto_reply_message || '';
+            }
+        }
+
+        // Save settings
+        document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const { data: { session } } = await supabase.auth.getSession();
+            const saveMessage = document.getElementById('saveMessage');
+            
+            const { error } = await supabase
+                .from('customers')
+                .update({
+                    business_name: document.getElementById('businessName').value,
+                    phone_number: document.getElementById('phoneNumber').value,
+                    website_url: document.getElementById('websiteUrl').value,
+                    auto_reply_message: document.getElementById('autoReplyMessage').value
+                })
+                .eq('email', session.user.email);
+            
+            if (!error) {
+                saveMessage.classList.remove('hidden');
+                setTimeout(() => saveMessage.classList.add('hidden'), 3000);
+            }
+        });
+
+        // Handle logout
+        async function handleLogout() {
+            await supabase.auth.signOut();
+            window.location.href = '/login.html';
+        }
+
+        // Run auth check on page load
+        checkAuth();
+    </script>
+
+</body>
+</html>
