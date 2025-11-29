@@ -62,12 +62,36 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Auto-Reply Message</label>
-                    <textarea id="autoReplyMessage" rows="4"
-                              class="w-full px-4 py-3 border border-gray-300 rounded-lg resize-none"
-                              placeholder="Thanks for calling! We'll get back to you ASAP..."></textarea>
-                    <p class="text-xs text-gray-500 mt-1">This message will be sent to anyone who calls and you miss.</p>
-                </div>
+                    <div>
+    <label class="block text-sm font-medium text-gray-700 mb-2">Auto-Reply Message</label>
+    <textarea id="autoReplyMessage" rows="4" maxlength="160"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg resize-none"
+              placeholder="Thanks for calling! We'll get back to you ASAP..."
+              oninput="updatePreview()"></textarea>
+    <div class="flex justify-between items-center mt-1">
+        <p class="text-xs text-gray-500">This message will be sent to anyone who calls and you miss.</p>
+        <p id="charCount" class="text-xs font-medium text-gray-600">0 / 160</p>
+    </div>
+</div>
+
+<!-- SMS Preview -->
+<div class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+    <h3 class="text-sm font-medium text-gray-700 mb-3">📱 Preview - What customers will receive:</h3>
+    <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-300 max-w-sm">
+        <div class="flex items-center gap-2 mb-2 pb-2 border-b border-gray-200">
+            <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-bold">
+                <img id="previewLogo" src="favicon.png" alt="Logo" class="w-8 h-8 rounded">
+            </div>
+            <span id="previewBusinessName" class="text-xs font-semibold text-gray-700">Your Business</span>
+        </div>
+        <p id="previewMessage" class="text-sm text-gray-800">
+            Your message will appear here...
+        </p>
+        <div id="previewWebsite" class="mt-2 pt-2 border-t border-gray-200 hidden">
+            <a href="#" class="text-xs text-blue-600 underline" id="previewWebsiteLink">www.yourbusiness.com</a>
+        </div>
+    </div>
+</div>
 
                 <div id="saveMessage" class="hidden bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg text-sm">
                     Settings saved successfully!
@@ -99,7 +123,48 @@
         const SUPABASE_URL = 'https://lhtrgutiqhqbnyfkdakd.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxodHJndXRpcWhxYm55ZmtkYWtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzODk5MzMsImV4cCI6MjA3OTk2NTkzM30._j4fSrw3ybuYgdqevI-Mj-UjnbGe8rvNEF0hqe2uKC0';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// Update preview and character count
+function updatePreview() {
+    const businessName = document.getElementById('businessName').value || 'Your Business';
+    const message = document.getElementById('autoReplyMessage').value || 'Your message will appear here...';
+    const websiteUrl = document.getElementById('websiteUrl').value;
+    const charCount = message.length;
+    
+    // Update character counter
+    document.getElementById('charCount').textContent = charCount + ' / 160';
+    
+    // Change color if approaching limit
+    const charCountEl = document.getElementById('charCount');
+    if (charCount > 140) {
+        charCountEl.classList.remove('text-gray-600');
+        charCountEl.classList.add('text-red-600', 'font-bold');
+    } else {
+        charCountEl.classList.remove('text-red-600', 'font-bold');
+        charCountEl.classList.add('text-gray-600');
+    }
+    
+    // Update preview
+    document.getElementById('previewBusinessName').textContent = businessName;
+    document.getElementById('previewMessage').textContent = message;
+    
+    // Show/hide website link
+    if (websiteUrl) {
+        document.getElementById('previewWebsite').classList.remove('hidden');
+        document.getElementById('previewWebsiteLink').textContent = websiteUrl;
+        document.getElementById('previewWebsiteLink').href = websiteUrl;
+    } else {
+        document.getElementById('previewWebsite').classList.add('hidden');
+    }
+}
 
+// Add input listeners for live preview
+document.getElementById('businessName').addEventListener('input', updatePreview);
+document.getElementById('websiteUrl').addEventListener('input', updatePreview);
+
+// Initialize preview on page load
+window.addEventListener('load', () => {
+    setTimeout(updatePreview, 500); // Delay to ensure data is loaded
+});
         // Check if user is logged in
         async function checkAuth() {
             const { data: { session } } = await supabase.auth.getSession();
