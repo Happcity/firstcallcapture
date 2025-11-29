@@ -24,15 +24,21 @@ export default async function handler(req, res) {
         const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // Find the customer who owns this Twilio number
-        const { data: customer, error } = await supabase
-            .from('customers')
-            .select('*')
-            .eq('phone_number', twilioNumber)
-            .single();
+const { data: customers, error } = await supabase
+    .from('customers')
+    .select('*');
 
-        if (error || !customer) {
-            console.log('Customer not found for number:', twilioNumber);
-            return res.status(200).json({ message: 'Customer not found' });
+// Find customer by matching cleaned phone numbers
+const customer = customers?.find(c => {
+    const cleanCustomerPhone = c.phone_number?.replace(/\D/g, '');
+    const cleanTwilioNumber = twilioNumber.replace(/\D/g, '');
+    return cleanCustomerPhone === cleanTwilioNumber;
+});
+
+if (error || !customer) {
+    console.log('Customer not found for number:', twilioNumber);
+    return res.status(200).json({ message: 'Customer not found' });
+}
         }
 
         // Get the auto-reply message
