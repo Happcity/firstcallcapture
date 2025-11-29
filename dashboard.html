@@ -107,16 +107,97 @@
         </div>
 
         <!-- Status Card -->
-        <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">Service Status</h2>
-            <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                <div>
-                    <p class="font-medium text-yellow-800">Setup in Progress</p>
-                    <p class="text-sm text-yellow-600">Complete your settings above to activate auto-reply</p>
-                </div>
-                <span class="px-3 py-1 bg-yellow-200 text-yellow-800 rounded-full text-sm font-medium">Pending</span>
+<div class="bg-white rounded-lg shadow p-6 mb-6">
+    <h2 class="text-xl font-bold text-gray-900 mb-4">Service Status</h2>
+    <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+        <div>
+            <p class="font-medium text-yellow-800">Setup in Progress</p>
+            <p class="text-sm text-yellow-600">Complete setup instructions below to activate auto-reply</p>
+        </div>
+        <span class="px-3 py-1 bg-yellow-200 text-yellow-800 rounded-full text-sm font-medium">Pending</span>
+    </div>
+</div>
+
+<!-- Setup Instructions -->
+<div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-bold text-gray-900 mb-4">📞 Quick Setup Guide</h2>
+    <p class="text-gray-600 mb-6">Follow these simple steps to activate your auto-reply system:</p>
+    
+    <div class="space-y-4">
+        <!-- Step 1 -->
+        <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+            <div class="flex-1">
+                <h3 class="font-semibold text-gray-900 mb-2">Save Your Settings Above</h3>
+                <p class="text-sm text-gray-600">Make sure you've filled in your business name and auto-reply message, then click "Save Settings".</p>
             </div>
         </div>
+
+        <!-- Step 2 -->
+        <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+            <div class="flex-1">
+                <h3 class="font-semibold text-gray-900 mb-2">Get Your Forwarding Number</h3>
+                <p class="text-sm text-gray-600 mb-2">We'll provide you with a dedicated phone number. When you miss a call, forward it to this number:</p>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 font-mono text-lg font-bold text-gray-900">
+                    (Coming Soon)
+                </div>
+                <p class="text-xs text-gray-500 mt-1">This number will be assigned after you complete payment setup</p>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+            <div class="flex-1">
+                <h3 class="font-semibold text-gray-900 mb-2">Set Up Call Forwarding on Your Phone</h3>
+                <p class="text-sm text-gray-600 mb-3">Enable "Forward When Busy/Unanswered" on your phone:</p>
+                
+                <!-- iPhone Instructions -->
+                <details class="mb-2">
+                    <summary class="cursor-pointer text-sm font-medium text-blue-600 hover:text-blue-700">📱 iPhone Instructions</summary>
+                    <div class="mt-2 pl-4 text-sm text-gray-600 space-y-1">
+                        <p>1. Open <strong>Settings</strong></p>
+                        <p>2. Tap <strong>Phone</strong></p>
+                        <p>3. Tap <strong>Call Forwarding</strong></p>
+                        <p>4. Toggle it <strong>ON</strong></p>
+                        <p>5. Enter your forwarding number above</p>
+                        <p>6. Tap <strong>Back</strong> to save</p>
+                    </div>
+                </details>
+
+                <!-- Android Instructions -->
+                <details>
+                    <summary class="cursor-pointer text-sm font-medium text-blue-600 hover:text-blue-700">📱 Android Instructions</summary>
+                    <div class="mt-2 pl-4 text-sm text-gray-600 space-y-1">
+                        <p>1. Open <strong>Phone</strong> app</p>
+                        <p>2. Tap the <strong>3-dot menu</strong> → <strong>Settings</strong></p>
+                        <p>3. Tap <strong>Calling accounts</strong> or <strong>Call settings</strong></p>
+                        <p>4. Tap <strong>Call forwarding</strong></p>
+                        <p>5. Select <strong>Forward when busy</strong> or <strong>Forward when unanswered</strong></p>
+                        <p>6. Enter your forwarding number above</p>
+                        <p>7. Tap <strong>Enable</strong> or <strong>Turn on</strong></p>
+                    </div>
+                </details>
+
+                <p class="text-xs text-gray-500 mt-3">💡 Tip: You can also dial a code directly - contact your carrier for their specific forwarding codes</p>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
+            <div class="flex-1">
+                <h3 class="font-semibold text-gray-900 mb-2">Test It Out!</h3>
+                <p class="text-sm text-gray-600">Call your business number from another phone and don't answer. The caller should receive your auto-reply text within seconds!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <p class="text-sm text-blue-800"><strong>Need help?</strong> Contact support at support@firstcallcapture.com</p>
+    </div>
+</div>
 
     </main>
 
