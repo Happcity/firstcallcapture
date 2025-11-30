@@ -14,6 +14,13 @@ export default async function handler(req, res) {
     }
 
     try {
+        
+    // Log everything for debugging
+    console.log('===== WEBHOOK CALLED =====');
+    console.log('Method:', req.method);
+    console.log('Body:', req.body);
+    console.log('Headers:', req.headers);
+    
         const callStatus = req.body.CallStatus;
         const callerNumber = req.body.From;
         const twilioNumber = req.body.To;
