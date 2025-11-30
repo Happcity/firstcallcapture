@@ -7,6 +7,12 @@ const TWILIO_ACCOUNT_SID = 'AC0037c8735022c338abddd7c34ac40157';
 const TWILIO_AUTH_TOKEN = '5908057a2c0a428e3678297841ee09d6';
 const TWILIO_PHONE_NUMBER = '+17708096998';
 
+export const config = {
+  api: {
+    bodyParser: true,
+  },
+};
+
 export default async function handler(req, res) {
     console.log('===== WEBHOOK CALLED =====');
     console.log('Method:', req.method);
