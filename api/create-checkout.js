@@ -21,8 +21,8 @@ export default async function handler(req, res) {
             subscription_data: {
                 trial_period_days: 14, // 14-day free trial
             },
-            success_url: `${process.env.VERCEL_URL || 'https://firstcallcapture.com'}/signup.html?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${process.env.VERCEL_URL || 'https://firstcallcapture.com'}/pricing.html`,
+            success_url: `https://firstcallcapture.com/signup.html?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `https://firstcallcapture.com/pricing.html`,
             allow_promotion_codes: true,
         });
 
