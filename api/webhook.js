@@ -14,52 +14,70 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Get the caller's phone number from Twilio
+        const callStatus = req.body.CallStatus;
         const callerNumber = req.body.From;
         const twilioNumber = req.body.To;
 
-        console.log('Incoming call from:', callerNumber, 'to:', twilioNumber);
+        console.log('Webhook received:', { callStatus, callerNumber, twilioNumber });
 
-        // Initialize Supabase
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        // Find the customer who owns this Twilio number
-const { data: customers, error } = await supabase
-    .from('customers')
-    .select('*');
-
-// Find customer by matching cleaned phone numbers
-const customer = customers?.find(c => {
-    const cleanCustomerPhone = c.phone_number?.replace(/\D/g, '');
-    const cleanTwilioNumber = twilioNumber.replace(/\D/g, '');
-    return cleanCustomerPhone === cleanTwilioNumber;
-});
-
-if (error || !customer) {
-    console.log('Customer not found for number:', twilioNumber);
-    return res.status(200).json({ message: 'Customer not found' });
-}
+        // If this is an incoming call (not a status update), respond with TwiML to answer it
+        if (!callStatus) {
+            console.log('Initial call - responding with TwiML');
+            res.setHeader('Content-Type', 'text/xml');
+            return res.status(200).send(`<?xml version="1.0" encoding="UTF-8"?>
+                <Response>
+                    <Say>This number is for missed call notifications only. Please call the business directly.</Say>
+                    <Hangup/>
+                </Response>`);
         }
 
-        // Get the auto-reply message
-        const message = customer.auto_reply_message || 
-            `Thanks for calling ${customer.business_name}! We'll get back to you ASAP.`;
+        // Handle call status updates - send SMS when call is completed/missed
+        if (callStatus === 'completed' || callStatus === 'no-answer' || callStatus === 'busy') {
+            console.log('Call ended - sending SMS');
 
-        // Send SMS using Twilio
-        const twilioClient = require('twilio')(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
-        
-        await twilioClient.messages.create({
-            body: message,
-            from: TWILIO_PHONE_NUMBER,
-            to: callerNumber
-        });
+            // Initialize Supabase
+            const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        console.log('SMS sent to:', callerNumber);
+            // Find the customer who owns this Twilio number
+            const { data: customers, error } = await supabase
+                .from('customers')
+                .select('*');
 
-        return res.status(200).json({ 
-            success: true, 
-            message: 'SMS sent successfully' 
-        });
+            // Find customer by matching cleaned phone numbers
+            const customer = customers?.find(c => {
+                const cleanCustomerPhone = c.phone_number?.replace(/\D/g, '');
+                const cleanTwilioNumber = twilioNumber.replace(/\D/g, '');
+                return cleanCustomerPhone === cleanTwilioNumber;
+            });
+
+            if (error || !customer) {
+                console.log('Customer not found for number:', twilioNumber);
+                return res.status(200).json({ message: 'Customer not found' });
+            }
+
+            // Get the auto-reply message
+            const message = customer.auto_reply_message || 
+                `Thanks for calling ${customer.business_name}! We'll get back to you ASAP.`;
+
+            // Send SMS using Twilio
+            const twilioClient = require('twilio')(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+            
+            await twilioClient.messages.create({
+                body: message,
+                from: TWILIO_PHONE_NUMBER,
+                to: callerNumber
+            });
+
+            console.log('SMS sent to:', callerNumber);
+
+            return res.status(200).json({ 
+                success: true, 
+                message: 'SMS sent successfully' 
+            });
+        }
+
+        // For other statuses, just acknowledge
+        return res.status(200).json({ message: 'Status received' });
 
     } catch (error) {
         console.error('Error:', error);
