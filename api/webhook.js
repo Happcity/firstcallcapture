@@ -8,88 +8,89 @@ const TWILIO_AUTH_TOKEN = '5908057a2c0a428e3678297841ee09d6';
 const TWILIO_PHONE_NUMBER = '+17708096998';
 
 export default async function handler(req, res) {
-    // Only accept POST requests
+    console.log('===== WEBHOOK CALLED =====');
+    console.log('Method:', req.method);
+    console.log('Body:', req.body);
+    
+    // Twilio sends both initial call AND status updates
+    // Accept all POST requests
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
     try {
-        
-    // Log everything for debugging
-    console.log('===== WEBHOOK CALLED =====');
-    console.log('Method:', req.method);
-    console.log('Body:', req.body);
-    console.log('Headers:', req.headers);
-    
         const callStatus = req.body.CallStatus;
         const callerNumber = req.body.From;
         const twilioNumber = req.body.To;
 
-        console.log('Webhook received:', { callStatus, callerNumber, twilioNumber });
+        console.log('Parsed:', { callStatus, callerNumber, twilioNumber });
 
-        // If this is an incoming call (not a status update), respond with TwiML to answer it
-        if (!callStatus) {
+        // Initial call - respond with TwiML
+        if (!callStatus || callStatus === 'ringing') {
             console.log('Initial call - responding with TwiML');
             res.setHeader('Content-Type', 'text/xml');
             return res.status(200).send(`<?xml version="1.0" encoding="UTF-8"?>
-                <Response>
-                    <Say>This number is for missed call notifications only. Please call the business directly.</Say>
-                    <Hangup/>
-                </Response>`);
+<Response>
+    <Say>Thank you for calling. Your message has been received.</Say>
+    <Hangup/>
+</Response>`);
         }
 
-        // Handle call status updates - send SMS when call is completed/missed
-        if (callStatus === 'completed' || callStatus === 'no-answer' || callStatus === 'busy') {
-            console.log('Call ended - sending SMS');
+        // Call completed - send SMS
+        if (callStatus === 'completed' || callStatus === 'no-answer' || callStatus === 'busy' || callStatus === 'failed') {
+            console.log('Call ended with status:', callStatus, '- sending SMS');
 
-            // Initialize Supabase
             const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            // Find the customer who owns this Twilio number
-            const { data: customers, error } = await supabase
+            // Find customer
+            const { data: customers } = await supabase
                 .from('customers')
                 .select('*');
 
-            // Find customer by matching cleaned phone numbers
             const customer = customers?.find(c => {
                 const cleanCustomerPhone = c.phone_number?.replace(/\D/g, '');
-                const cleanTwilioNumber = twilioNumber.replace(/\D/g, '');
+                const cleanTwilioNumber = twilioNumber?.replace(/\D/g, '');
                 return cleanCustomerPhone === cleanTwilioNumber;
             });
 
-            if (error || !customer) {
-                console.log('Customer not found for number:', twilioNumber);
-                return res.status(200).json({ message: 'Customer not found' });
+            if (!customer) {
+                console.log('No customer found for number:', twilioNumber);
+                return res.status(200).json({ message: 'No customer found' });
             }
 
-            // Get the auto-reply message
+            console.log('Found customer:', customer.business_name);
+
+            // Get message
             const message = customer.auto_reply_message || 
                 `Thanks for calling ${customer.business_name}! We'll get back to you ASAP.`;
 
-            // Send SMS using Twilio
-            const twilioClient = require('twilio')(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+            // Send SMS
+            const twilio = require('twilio');
+            const client = new twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
             
-            await twilioClient.messages.create({
+            const sms = await client.messages.create({
                 body: message,
                 from: TWILIO_PHONE_NUMBER,
                 to: callerNumber
             });
 
-            console.log('SMS sent to:', callerNumber);
+            console.log('SMS sent! SID:', sms.sid);
 
             return res.status(200).json({ 
-                success: true, 
-                message: 'SMS sent successfully' 
+                success: true,
+                message: 'SMS sent',
+                sid: sms.sid
             });
         }
 
-        // For other statuses, just acknowledge
+        // Other statuses - just acknowledge
+        console.log('Other status:', callStatus);
         return res.status(200).json({ message: 'Status received' });
 
     } catch (error) {
-        console.error('Error:', error);
+        console.error('ERROR:', error);
         return res.status(500).json({ 
-            error: 'Internal server error',
+            error: 'Internal error',
             details: error.message 
         });
     }
