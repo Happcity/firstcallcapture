@@ -4,7 +4,7 @@ const SUPABASE_URL = 'https://lhtrgutiqhqbnyfkdakd.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxodHJndXRpcWhxYm55ZmtkYWtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzODk5MzMsImV4cCI6MjA3OTk2NTkzM30._j4fSrw3ybuYgdqevI-Mj-UjnbGe8rvNEF0hqe2uKC0';
 
 const TWILIO_ACCOUNT_SID = 'AC0037c8735022c338abddd7c34ac40157';
-const TWILIO_AUTH_TOKEN = 'a6e7bb0ddba34c3ab3d9d27c40fcd4cd';
+const TWILIO_AUTH_TOKEN = '5908057a2c0a428e3678297841ee09d6';
 const TWILIO_PHONE_NUMBER = '+17708096998';
 
 export const config = {
