@@ -509,11 +509,11 @@
         }
 
         function selectPlan(plan) {
-            // In real app, this would go to signup flow
-            alert(`Selected ${plan} plan! This will open the signup flow when backend is connected.`);
-            // For now, show dashboard
-            window.location.href = 'dashboard.html';
-        }
+    // Store selected plan in session storage
+    sessionStorage.setItem('selectedPlan', plan);
+    // Redirect to signup
+    window.location.href = '/signup.html';
+}
 
         function showComingSoon() {
             document.getElementById('comingSoonModal').classList.remove('hidden');
