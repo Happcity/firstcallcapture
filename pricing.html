@@ -119,41 +119,12 @@
         </div>
     </section>
 
-    <script>
-        const stripe = Stripe('pk_test_51SQwt1HK7i634yqwHk7EDz6BwmdULzmQEtmBWA00CzfTI1JY1lXCfDoGNMsWmSFRmMS7PsqmQRA1SQF2qeUiFREK009vtXKM4F');
-        
-        document.getElementById('subscribeBtn').addEventListener('click', async () => {
-            const button = document.getElementById('subscribeBtn');
-            button.disabled = true;
-            button.textContent = 'Loading...';
-            
-            try {
-                // Call our backend to create checkout session
-                const response = await fetch('/api/create-checkout', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        priceId: 'price_1SZBPqHK7i634yqwj1ky0V0e'
-                    })
-                });
-                
-                const { sessionId } = await response.json();
-                
-                // Redirect to Stripe Checkout
-                const { error } = await stripe.redirectToCheckout({ sessionId });
-                
-                if (error) {
-                    alert('Error: ' + error.message);
-                    button.disabled = false;
-                    button.textContent = 'Start 14-Day Free Trial';
-                }
-            } catch (error) {
-                alert('Error: ' + error.message);
-                button.disabled = false;
-                button.textContent = 'Start 14-Day Free Trial';
-            }
-        });
-    </script>
+ <script>
+    document.getElementById('subscribeBtn').addEventListener('click', () => {
+        // Redirect to signup page first
+        window.location.href = '/signup.html';
+    });
+</script>
 
 </body>
 </html>
