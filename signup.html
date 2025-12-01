@@ -71,9 +71,6 @@
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxodHJndXRpcWhxYm55ZmtkYWtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzODk5MzMsImV4cCI6MjA3OTk2NTkzM30._j4fSrw3ybuYgdqevI-Mj-UjnbGe8rvNEF0hqe2uKC0';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Load Stripe
-    const stripe = Stripe('pk_test_51SQwt1HK7i634yqwHk7EDz6BwmdULzmQEtmBWA00CzfTI1JY1lXCfDoGNMsWmSFRmMS7PsqmQRA1SQF2qeUiFREK009vtXKM4F');
-
     // Handle signup
     document.getElementById('signupForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -90,12 +87,27 @@
         submitBtn.disabled = true;
         submitBtn.textContent = 'Creating account...';
         
+        // Check if email already exists in customers table
+        const { data: existingCustomer } = await supabase
+            .from('customers')
+            .select('email')
+            .eq('email', email)
+            .single();
+        
+        if (existingCustomer) {
+            errorDiv.textContent = 'An account with this email already exists. Please sign in instead.';
+            errorDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create Account';
+            return;
+        }
+        
         // Create auth user
         const { data: authData, error: authError } = await supabase.auth.signUp({
             email: email,
             password: password,
             options: {
-                emailRedirectTo: 'https://firstcallcapture.com/dashboard.html'
+                emailRedirectTo: 'https://firstcallcapture.com/checkout.html'
             }
         });
         
@@ -125,30 +137,13 @@
             return;
         }
 
-        // Account created! Now redirect to Stripe checkout
-        submitBtn.textContent = 'Redirecting to checkout...';
-        
-        try {
-            const response = await fetch('/api/create-checkout', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    priceId: 'price_1SZBPqHK7i634yqwj1ky0V0e'
-                })
-            });
-
-            const { sessionId } = await response.json();
-
-            // Redirect to Stripe checkout
-            await stripe.redirectToCheckout({ sessionId });
-        } catch (error) {
-            errorDiv.textContent = 'Account created! But checkout failed. Please contact support.';
-            errorDiv.classList.remove('hidden');
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Create Account';
-        }
+        // Show success message
+        successDiv.textContent = 'Account created! Check your email to confirm, then complete payment.';
+        successDiv.classList.remove('hidden');
+        document.getElementById('signupForm').reset();
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Check Your Email';
     });
 </script>
-
 </body>
 </html>
