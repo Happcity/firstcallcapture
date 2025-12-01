@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Subscription - First Call Capture</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body class="bg-gray-50">
+    
+    <div class="min-h-screen flex items-center justify-center py-12 px-4">
+        <div class="max-w-md w-full text-center space-y-8">
+            
+            <img src="favicon.png" alt="First Call Capture" class="w-16 h-16 mx-auto">
+            
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Email Confirmed! 🎉</h2>
+                <p class="text-lg text-gray-600 mb-8">Redirecting you to complete your subscription...</p>
+                
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const stripe = Stripe('pk_test_51SQwt1HK7i634yqwHk7EDz6BwmdULzmQEtmBWA00CzfTI1JY1lXCfDoGNMsWmSFRmMS7PsqmQRA1SQF2qeUiFREK009vtXKM4F');
+
+        // Automatically redirect to Stripe checkout
+        async function redirectToCheckout() {
+            try {
+                const response = await fetch('/api/create-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        priceId: 'price_1SZBPqHK7i634yqwj1ky0V0e'
+                    })
+                });
+
+                const { sessionId } = await response.json();
+
+                // Redirect to Stripe checkout
+                await stripe.redirectToCheckout({ sessionId });
+            } catch (error) {
+                document.body.innerHTML = `
+                    <div class="min-h-screen flex items-center justify-center p-4">
+                        <div class="text-center">
+                            <h2 class="text-2xl font-bold text-gray-900 mb-4">Oops! Something went wrong</h2>
+                            <p class="text-gray-600 mb-4">Please contact support at support@firstcallcapture.com</p>
+                            <a href="/login.html" class="text-blue-600 hover:text-blue-500">← Back to Login</a>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Start redirect after 1 second
+        setTimeout(redirectToCheckout, 1000);
+    </script>
+
+</body>
+</html>
