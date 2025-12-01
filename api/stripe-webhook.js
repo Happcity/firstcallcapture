@@ -1,4 +1,4 @@
-// Stripe webhook handler
+// Stripe webhook handler - Updated Dec 1
 import { createClient } from '@supabase/supabase-js';
 const stripe = require('stripe')('sk_test_51SQwt1HK7i634yqwSNAyZG2s32o5O0a7RvBqdECkzhpE4RpRzF0T5uWjdXbEefFpFqRdE88ZvRex3BlS18niJzPT00KAEaucrh');
 const twilio = require('twilio');
