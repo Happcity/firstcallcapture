@@ -1,25 +1,29 @@
-// Send verification SMS via Twilio
+// Send verification SMS via Twilio Verify
 export default async function handler(req, res) {
+    console.log('=== TWILIO VERIFY SMS API CALLED ===');
+    console.log('Phone:', req.body.phoneNumber);
+    
     // Only allow POST requests
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const { phoneNumber, verificationCode } = req.body;
+    const { phoneNumber } = req.body;
 
-    if (!phoneNumber || !verificationCode) {
-        return res.status(400).json({ error: 'Missing required fields' });
+    if (!phoneNumber) {
+        return res.status(400).json({ error: 'Phone number is required' });
     }
 
     try {
-        // Twilio credentials from environment variables
         const accountSid = process.env.TWILIO_ACCOUNT_SID;
         const authToken = process.env.TWILIO_AUTH_TOKEN;
-        const twilioPhoneNumber = '+17708096998'; // Your Twilio number
+        const verifySid = 'VAbc24d231eb8ea6d12a0172ea07db453c'; // Your Verify Service SID
 
-        // Send SMS using Twilio API
+        console.log('Sending verification to:', phoneNumber);
+
+        // Start verification using Twilio Verify API
         const response = await fetch(
-            `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`,
+            `https://verify.twilio.com/v2/Services/${verifySid}/Verifications`,
             {
                 method: 'POST',
                 headers: {
@@ -28,22 +32,23 @@ export default async function handler(req, res) {
                 },
                 body: new URLSearchParams({
                     To: phoneNumber,
-                    From: twilioPhoneNumber,
-                    Body: `Your First Call Capture verification code is: ${verificationCode}\n\nThis code expires in 10 minutes.\n\nNo SMS charges apply to you.`
+                    Channel: 'sms'
                 })
             }
         );
 
         const data = await response.json();
+        console.log('Twilio Verify response:', data);
 
         if (!response.ok) {
-            console.error('Twilio error:', data);
-            return res.status(500).json({ error: 'Failed to send SMS', details: data });
+            console.error('Twilio Verify error:', data);
+            return res.status(500).json({ error: 'Failed to send verification SMS', details: data });
         }
 
         return res.status(200).json({ 
-            success: true, 
-            messageSid: data.sid 
+            success: true,
+            status: data.status,
+            sid: data.sid
         });
 
     } catch (error) {
