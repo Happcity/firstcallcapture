@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body class="bg-gray-50">
     
@@ -64,56 +65,90 @@
         </div>
     </div>
 
-    <script>
-        // Initialize Supabase
-        const SUPABASE_URL = 'https://lhtrgutiqhqbnyfkdakd.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxodHJndXRpcWhxYm55ZmtkYWtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzODk5MzMsImV4cCI6MjA3OTk2NTkzM30._j4fSrw3ybuYgdqevI-Mj-UjnbGe8rvNEF0hqe2uKC0';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+<script>
+    // Initialize Supabase
+    const SUPABASE_URL = 'https://lhtrgutiqhqbnyfkdakd.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxodHJndXRpcWhxYm55ZmtkYWtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzODk5MzMsImV4cCI6MjA3OTk2NTkzM30._j4fSrw3ybuYgdqevI-Mj-UjnbGe8rvNEF0hqe2uKC0';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Handle signup
-        document.getElementById('signupForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const businessName = document.getElementById('businessName').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('errorMessage');
-            const successDiv = document.getElementById('successMessage');
-            
-            errorDiv.classList.add('hidden');
-            successDiv.classList.add('hidden');
-            
-            // Create auth user
-            const { data: authData, error: authError } = await supabase.auth.signUp({
-                email: email,
-                password: password
-            });
-            
-            if (authError) {
-                errorDiv.textContent = authError.message;
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-            
-            // Create customer record
-            const { error: customerError } = await supabase
-                .from('customers')
-                .insert([
-                    { 
-                        email: email,
-                        business_name: businessName
-                    }
-                ]);
-            
-            if (customerError) {
-                errorDiv.textContent = 'Account created but profile setup failed. Please contact support.';
-                errorDiv.classList.remove('hidden');
-            } else {
-                successDiv.classList.remove('hidden');
-                document.getElementById('signupForm').reset();
+    // Load Stripe
+    const stripe = Stripe('pk_test_51SQwt1HK7i634yqwHk7EDz6BwmdULzmQEtmBWA00CzfTI1JY1lXCfDoGNMsWmSFRmMS7PsqmQRA1SQF2qeUiFREK009vtXKM4F');
+
+    // Handle signup
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const businessName = document.getElementById('businessName').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const errorDiv = document.getElementById('errorMessage');
+        const successDiv = document.getElementById('successMessage');
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        
+        errorDiv.classList.add('hidden');
+        successDiv.classList.add('hidden');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating account...';
+        
+        // Create auth user
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                emailRedirectTo: 'https://firstcallcapture.com/dashboard.html'
             }
         });
-    </script>
+        
+        if (authError) {
+            errorDiv.textContent = authError.message;
+            errorDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create Account';
+            return;
+        }
+        
+        // Create customer record
+        const { error: customerError } = await supabase
+            .from('customers')
+            .insert([
+                { 
+                    email: email,
+                    business_name: businessName
+                }
+            ]);
+        
+        if (customerError) {
+            errorDiv.textContent = 'Account created but profile setup failed. Please contact support.';
+            errorDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create Account';
+            return;
+        }
+
+        // Account created! Now redirect to Stripe checkout
+        submitBtn.textContent = 'Redirecting to checkout...';
+        
+        try {
+            const response = await fetch('/api/create-checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    priceId: 'price_1SZBPqHK7i634yqwj1ky0V0e'
+                })
+            });
+
+            const { sessionId } = await response.json();
+
+            // Redirect to Stripe checkout
+            await stripe.redirectToCheckout({ sessionId });
+        } catch (error) {
+            errorDiv.textContent = 'Account created! But checkout failed. Please contact support.';
+            errorDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create Account';
+        }
+    });
+</script>
 
 </body>
 </html>
