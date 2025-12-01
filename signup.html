@@ -31,6 +31,13 @@
                                placeholder="Your Business Name">
                     </div>
                     <div>
+                        <label for="phoneNumber" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input id="phoneNumber" name="phoneNumber" type="tel" required 
+                               class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                               placeholder="+1234567890">
+                        <p class="mt-1 text-xs text-gray-500">Include country code (e.g., +1 for US)</p>
+                    </div>
+                    <div>
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
                         <input id="email" name="email" type="email" required 
                                class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -76,6 +83,7 @@
         e.preventDefault();
         
         const businessName = document.getElementById('businessName').value;
+        const phoneNumber = document.getElementById('phoneNumber').value;
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const errorDiv = document.getElementById('errorMessage');
@@ -107,7 +115,7 @@
             email: email,
             password: password,
             options: {
-                emailRedirectTo: 'https://firstcallcapture.com/checkout.html'
+                emailRedirectTo: 'https://firstcallcapture.com/verify.html'
             }
         });
         
@@ -119,13 +127,21 @@
             return;
         }
         
+        // Generate 6-digit verification code
+        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+        const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString(); // 10 minutes
+        
         // Create customer record
         const { error: customerError } = await supabase
             .from('customers')
             .insert([
                 { 
                     email: email,
-                    business_name: businessName
+                    business_name: businessName,
+                    phone_number: phoneNumber,
+                    verification_code: verificationCode,
+                    verification_code_expires_at: expiresAt,
+                    is_verified: false
                 }
             ]);
         
@@ -137,12 +153,38 @@
             return;
         }
 
+        // Send SMS verification code via our API
+        try {
+            const smsResponse = await fetch('/api/send-verification-sms.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    phoneNumber: phoneNumber,
+                    verificationCode: verificationCode
+                })
+            });
+            
+            if (!smsResponse.ok) {
+                console.error('SMS send failed, but continuing...');
+            }
+        } catch (smsError) {
+            console.error('SMS error:', smsError);
+            // Don't block signup if SMS fails
+        }
+
         // Show success message
-        successDiv.textContent = 'Account created! Check your email to confirm, then complete payment.';
+        successDiv.textContent = 'Account created! Check your email AND text message to verify your account.';
         successDiv.classList.remove('hidden');
         document.getElementById('signupForm').reset();
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Check Your Email';
+        submitBtn.textContent = 'Check Your Email & Phone';
+        
+        // Redirect to verification page after 2 seconds
+        setTimeout(() => {
+            window.location.href = '/verify.html';
+        }, 2000);
     });
 </script>
 </body>
