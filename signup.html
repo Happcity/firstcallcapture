@@ -132,18 +132,18 @@
         const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString(); // 10 minutes
         
         // Create customer record
-        const { error: customerError } = await supabase
-            .from('customers')
-            .insert([
-                { 
-                    email: email,
-                    business_name: businessName,
-                    phone_number: phoneNumber,
-                    verification_code: verificationCode,
-                    verification_code_expires_at: expiresAt,
-                    is_verified: false
-                }
-            ]);
+const { error: customerError } = await supabase
+    .from('customers')
+    .insert([
+        { 
+            email: email,
+            business_name: businessName,
+            user_phone_number: phoneNumber,
+            verification_code: verificationCode,
+            verification_code_expires_at: expiresAt,
+            is_verified: false
+        }
+    ]);
         
         if (customerError) {
             errorDiv.textContent = 'Account created but profile setup failed. Please contact support.';
