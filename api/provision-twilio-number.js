@@ -2,7 +2,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://lhtrgutiqhqbnyfkdakd.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxodHJndXRpcWhxYm55ZmtkYWtkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NDM4OTkzMywiZXhwIjoyMDc5OTY1OTMzfQ.5v_IPLme7x7F_e7lPW_LEkcantqXRLYwKBeJyVdLJ-w';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxodHJndXRpcWhxYm55ZmtkYWtkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NDM4OTkzMywiZXhwIjoyMDc5OTY1OTMzfQ.8GIHdKstFqg10r33e3o86dQFGAdBmQ5ZAP0U7rcGJXk';
 
 export default async function handler(req, res) {
     console.log('=== PROVISION TWILIO NUMBER API CALLED ===');
