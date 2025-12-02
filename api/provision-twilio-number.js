@@ -71,12 +71,12 @@ export default async function handler(req, res) {
         }
 
         // Step 3: Update customer in Supabase
-        const supabase = createClient(supabaseUrl, supabaseKey);
-        
-        const { error: updateError } = await supabase
-            .from('customers')
-            .update({ phone_number: phoneNumber })
-            .eq('email', email);
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+const { error: updateError } = await supabase
+    .from('customers')
+    .update({ twilio_phone_number: phoneNumber })
+    .eq('email', email);
 
         if (updateError) {
             console.error('Failed to update customer:', updateError);
