@@ -43,13 +43,19 @@
                                class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                placeholder="you@company.com">
                     </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input id="password" name="password" type="password" required
+                               class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                               placeholder="At least 6 characters">
+                    </div>
                     <div class="flex items-start">
-    <input id="consent" name="consent" type="checkbox" required
-           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1">
-    <label for="consent" class="ml-3 text-sm text-gray-700">
-        I agree to receive SMS notifications when customers call my business number. I understand I can opt out by replying STOP at any time. Standard message and data rates may apply. By signing up, I also agree to the <a href="#" class="text-blue-600 hover:text-blue-500">Terms of Service</a> and <a href="#" class="text-blue-600 hover:text-blue-500">Privacy Policy</a>.
-    </label>
-</div>
+                        <input id="consent" name="consent" type="checkbox" required
+                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1">
+                        <label for="consent" class="ml-3 text-sm text-gray-700">
+                            I agree to receive SMS notifications when customers call my business number. I understand I can opt out by replying STOP at any time. Standard message and data rates may apply. By signing up, I also agree to the <a href="#" class="text-blue-600 hover:text-blue-500">Terms of Service</a> and <a href="#" class="text-blue-600 hover:text-blue-500">Privacy Policy</a>.
+                        </label>
+                    </div>
                 </div>
 
                 <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
@@ -97,14 +103,14 @@
         submitBtn.textContent = 'Creating account...';
 
         // Check consent checkbox
-const consentChecked = document.getElementById('consent').checked;
-if (!consentChecked) {
-    errorDiv.textContent = 'You must agree to receive SMS notifications to use this service.';
-    errorDiv.classList.remove('hidden');
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Create Account';
-    return;
-}
+        const consentChecked = document.getElementById('consent').checked;
+        if (!consentChecked) {
+            errorDiv.textContent = 'You must agree to receive SMS notifications to use this service.';
+            errorDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create Account';
+            return;
+        }
         
         // Check if email already exists in customers table
         const { data: existingCustomer } = await supabase
@@ -143,18 +149,18 @@ if (!consentChecked) {
         const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString(); // 10 minutes
         
         // Create customer record
-const { error: customerError } = await supabase
-    .from('customers')
-    .insert([
-        { 
-            email: email,
-            business_name: businessName,
-            user_phone_number: phoneNumber,
-            verification_code: verificationCode,
-            verification_code_expires_at: expiresAt,
-            is_verified: false
-        }
-    ]);
+        const { error: customerError } = await supabase
+            .from('customers')
+            .insert([
+                { 
+                    email: email,
+                    business_name: businessName,
+                    user_phone_number: phoneNumber,
+                    verification_code: verificationCode,
+                    verification_code_expires_at: expiresAt,
+                    is_verified: false
+                }
+            ]);
         
         if (customerError) {
             errorDiv.textContent = 'Account created but profile setup failed. Please contact support.';
@@ -165,46 +171,46 @@ const { error: customerError } = await supabase
         }
 
         // Provision Twilio number for this customer
-try {
-    const provisionResponse = await fetch('/api/provision-twilio-number.js', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            email: email
-        })
-    });
-    
-    if (!provisionResponse.ok) {
-        console.error('Number provisioning failed, but continuing...');
-    } else {
-        const provisionData = await provisionResponse.json();
-        console.log('Provisioned number:', provisionData.phoneNumber);
-    }
-} catch (provisionError) {
-    console.error('Provision error:', provisionError);
-}
+        try {
+            const provisionResponse = await fetch('/api/provision-twilio-number.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email
+                })
+            });
+            
+            if (!provisionResponse.ok) {
+                console.error('Number provisioning failed, but continuing...');
+            } else {
+                const provisionData = await provisionResponse.json();
+                console.log('Provisioned number:', provisionData.phoneNumber);
+            }
+        } catch (provisionError) {
+            console.error('Provision error:', provisionError);
+        }
 
-// Send SMS verification code via our API
-try {
-    const smsResponse = await fetch('/api/send-verification-sms.js', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            phoneNumber: phoneNumber
-        })
-    });
-    
-    if (!smsResponse.ok) {
-        console.error('SMS send failed, but continuing...');
-    }
-} catch (smsError) {
-    console.error('SMS error:', smsError);
-    // Don't block signup if SMS fails
-}
+        // Send SMS verification code via our API
+        try {
+            const smsResponse = await fetch('/api/send-verification-sms.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    phoneNumber: phoneNumber
+                })
+            });
+            
+            if (!smsResponse.ok) {
+                console.error('SMS send failed, but continuing...');
+            }
+        } catch (smsError) {
+            console.error('SMS error:', smsError);
+            // Don't block signup if SMS fails
+        }
 
         // Store phone number for verification
         sessionStorage.setItem('verificationPhone', phoneNumber);
