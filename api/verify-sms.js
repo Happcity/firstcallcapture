@@ -52,13 +52,13 @@ export default async function handler(req, res) {
         const supabase = createClient(supabaseUrl, supabaseKey);
 
         const { error: updateError } = await supabase
-            .from('customers')
-            .update({ 
-                is_verified: true,
-                verification_code: null,
-                verification_code_expires_at: null
-            })
-            .eq('phone_number', phoneNumber);
+    .from('customers')
+    .update({ 
+        is_verified: true,
+        verification_code: null,
+        verification_code_expires_at: null
+    })
+    .eq('user_phone_number', phoneNumber);
 
         if (updateError) {
             console.error('Supabase update error:', updateError);
