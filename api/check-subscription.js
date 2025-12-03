@@ -3,15 +3,32 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-    const { createClient } = require('@supabase/supabase-js');
-    
-    const supabase = createClient(
-        process.env.SUPABASE_URL,
-        process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
-
     try {
+        // Debug: Check if env vars exist
+        console.log('SUPABASE_URL exists:', !!process.env.SUPABASE_URL);
+        console.log('SUPABASE_SERVICE_ROLE_KEY exists:', !!process.env.SUPABASE_SERVICE_ROLE_KEY);
+        console.log('STRIPE_SECRET_KEY exists:', !!process.env.STRIPE_SECRET_KEY);
+
+        const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+        const { createClient } = require('@supabase/supabase-js');
+        
+        const supabaseUrl = process.env.SUPABASE_URL;
+        const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+        if (!supabaseUrl || !supabaseKey) {
+            console.error('Missing Supabase credentials!');
+            return res.status(500).json({ 
+                error: 'Server configuration error',
+                hasAccess: false,
+                debug: {
+                    hasUrl: !!supabaseUrl,
+                    hasKey: !!supabaseKey
+                }
+            });
+        }
+
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
         const { email } = req.body;
 
         if (!email) {
@@ -60,7 +77,8 @@ export default async function handler(req, res) {
         console.error('Subscription check error:', error);
         return res.status(500).json({ 
             error: 'Failed to check subscription',
-            hasAccess: false 
+            hasAccess: false,
+            message: error.message
         });
     }
 }
