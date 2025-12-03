@@ -375,55 +375,63 @@
     let customerData = null;
 
     // Check authentication on page load
-async function checkAuth() {
-    const { data: { user }, error } = await supabase.auth.getUser();
-    
-    if (error || !user) {
-        window.location.href = '/login.html';
-        return;
-    }
-
-    currentUser = user;
-    document.getElementById('userEmail').textContent = user.email;
-    
-    // Check subscription status
-    await checkSubscription();
-    
-    await loadCustomerData();
-}
-
-// Check if user has active subscription
-async function checkSubscription() {
-    try {
-        const response = await fetch('/api/check-subscription.js', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: currentUser.email
-            })
-        });
-
-        const data = await response.json();
-
-        if (!data.hasAccess) {
-            // No access - redirect to checkout
-            if (data.reason === 'no_subscription') {
-                alert('Please complete payment to access your dashboard.');
-                window.location.href = '/checkout.html';
-            } else {
-                alert('Unable to verify subscription. Please contact support.');
-                window.location.href = '/login.html';
-            }
+    async function checkAuth() {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        
+        if (error || !user) {
+            window.location.href = '/login.html';
+            return;
         }
 
-        // If hasAccess is true, continue loading dashboard
-    } catch (error) {
-        console.error('Subscription check failed:', error);
-        alert('Unable to verify subscription. Please try again or contact support.');
+        currentUser = user;
+        document.getElementById('userEmail').textContent = user.email;
+        
+        // Check subscription status
+        const hasAccess = await checkSubscription();
+        
+        // ONLY load data if they have access
+        if (hasAccess) {
+            await loadCustomerData();
+        }
     }
-}
+
+    // Check if user has active subscription
+    async function checkSubscription() {
+        try {
+            const response = await fetch('/api/check-subscription.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: currentUser.email
+                })
+            });
+
+            const data = await response.json();
+
+            if (!data.hasAccess) {
+                // No access - redirect to checkout
+                if (data.reason === 'no_subscription') {
+                    alert('Please complete payment to access your dashboard.');
+                    window.location.href = '/checkout.html';
+                    return false; // STOP EXECUTION
+                } else {
+                    alert('Unable to verify subscription. Please contact support.');
+                    window.location.href = '/login.html';
+                    return false; // STOP EXECUTION
+                }
+            }
+
+            // If hasAccess is true, continue loading dashboard
+            return true;
+        } catch (error) {
+            console.error('Subscription check failed:', error);
+            alert('Unable to verify subscription. Please try again or contact support.');
+            window.location.href = '/login.html';
+            return false; // STOP EXECUTION
+        }
+    }
 
     // Load customer data from database
     async function loadCustomerData() {
