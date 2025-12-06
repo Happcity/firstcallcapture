@@ -218,28 +218,6 @@
             return;
         }
 
-        // Provision Twilio number for this customer
-        try {
-            const provisionResponse = await fetch('/api/provision-twilio-number.js', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email
-                })
-            });
-            
-            if (!provisionResponse.ok) {
-                console.error('Number provisioning failed, but continuing...');
-            } else {
-                const provisionData = await provisionResponse.json();
-                console.log('Provisioned number:', provisionData.phoneNumber);
-            }
-        } catch (provisionError) {
-            console.error('Provision error:', provisionError);
-        }
-
         // Send SMS verification code via our API
         try {
             const smsResponse = await fetch('/api/send-verification-sms.js', {
