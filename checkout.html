@@ -215,6 +215,8 @@
 
     </div>
 
+    <div id="footer-placeholder"></div>
+
 <script>
     // Initialize Supabase
     const SUPABASE_URL = 'https://lhtrgutiqhqbnyfkdakd.supabase.co';
@@ -294,5 +296,14 @@
     checkAuth();
 </script>
 
+    <!-- Footer Loader -->
+    <script>
+        fetch('/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            });
+    </script>
+    
 </body>
 </html>
