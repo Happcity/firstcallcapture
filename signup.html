@@ -34,8 +34,8 @@
                         <label for="phoneNumber" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                         <input id="phoneNumber" name="phoneNumber" type="tel" required 
                                class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                               placeholder="+1234567890">
-                        <p class="mt-1 text-xs text-gray-500">Include country code (e.g., +1 for US)</p>
+                               placeholder="+1 (555) 123-4567">
+                        <p class="mt-1 text-xs text-gray-500">US phone numbers only • Will auto-format as you type</p>
                     </div>
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
@@ -85,12 +85,51 @@
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxodHJndXRpcWhxYm55ZmtkYWtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzODk5MzMsImV4cCI6MjA3OTk2NTkzM30._j4fSrw3ybuYgdqevI-Mj-UjnbGe8rvNEF0hqe2uKC0';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    // Phone number formatting
+    const phoneInput = document.getElementById('phoneNumber');
+    
+    phoneInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+        
+        // Auto-add +1 if not present
+        if (value.length > 0 && !value.startsWith('1')) {
+            value = '1' + value;
+        }
+        
+        // Limit to 11 digits (1 + 10 digit US number)
+        value = value.substring(0, 11);
+        
+        // Format as +1 (555) 123-4567
+        let formatted = '+';
+        if (value.length > 0) {
+            formatted += value.substring(0, 1); // Country code
+        }
+        if (value.length > 1) {
+            formatted += ' (' + value.substring(1, 4); // Area code
+        }
+        if (value.length > 4) {
+            formatted += ') ' + value.substring(4, 7); // First 3 digits
+        }
+        if (value.length > 7) {
+            formatted += '-' + value.substring(7, 11); // Last 4 digits
+        }
+        
+        e.target.value = formatted;
+    });
+
+    // Extract clean phone number for submission
+    function getCleanPhoneNumber() {
+        const formatted = phoneInput.value;
+        const cleaned = '+' + formatted.replace(/\D/g, '');
+        return cleaned;
+    }
+
     // Handle signup
     document.getElementById('signupForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const businessName = document.getElementById('businessName').value;
-        const phoneNumber = document.getElementById('phoneNumber').value;
+        const phoneNumber = getCleanPhoneNumber(); // Get cleaned +1XXXXXXXXXX format
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const errorDiv = document.getElementById('errorMessage');
@@ -101,6 +140,15 @@
         successDiv.classList.add('hidden');
         submitBtn.disabled = true;
         submitBtn.textContent = 'Creating account...';
+
+        // Validate phone number length
+        if (phoneNumber.length !== 12) { // +1 + 10 digits
+            errorDiv.textContent = 'Please enter a valid 10-digit US phone number.';
+            errorDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create Account';
+            return;
+        }
 
         // Check consent checkbox
         const consentChecked = document.getElementById('consent').checked;
