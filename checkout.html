@@ -3,61 +3,319 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complete Your Subscription - First Call Capture</title>
+    <title>Choose Your Plan - First Call Capture</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .plan-card {
+            transition: all 0.3s ease;
+        }
+        .plan-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        .plan-card.selected {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+    </style>
 </head>
-<body class="bg-gray-50">
-    
-    <div class="min-h-screen flex items-center justify-center py-12 px-4">
-        <div class="max-w-md w-full text-center space-y-8">
+<body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="flex items-center justify-center space-x-3 mb-4">
+                <img src="favicon.png" alt="First Call Capture" class="w-12 h-12">
+                <h1 class="text-3xl font-bold text-gray-900">First Call Capture</h1>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Choose Your Plan</h2>
+            <p class="text-gray-600">Start your 14-day free trial - no credit card required until trial ends</p>
+        </div>
+
+        <!-- Pricing Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             
-            <img src="favicon.png" alt="First Call Capture" class="w-16 h-16 mx-auto">
-            
-            <div>
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Email Confirmed! 🎉</h2>
-                <p class="text-lg text-gray-600 mb-8">Redirecting you to complete your subscription...</p>
+            <!-- Starter Plan -->
+            <div class="plan-card bg-white rounded-2xl shadow-lg p-8 cursor-pointer border-2 border-gray-200" onclick="selectPlan('starter')">
+                <input type="radio" name="plan" id="plan-starter" value="starter" class="hidden">
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Starter</h3>
+                    <div class="mb-4">
+                        <span class="text-4xl font-bold text-gray-900">$29</span>
+                        <span class="text-gray-600">/month</span>
+                    </div>
+                    <p class="text-sm text-gray-600">Perfect for solo entrepreneurs</p>
+                </div>
                 
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                <ul class="space-y-3 mb-8">
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700">1 business phone number</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700">Unlimited auto-reply SMS</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700">Custom voice messages</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700">Email support</span>
+                    </li>
+                </ul>
+                
+                <div class="text-center">
+                    <span class="inline-block px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
+                        14-Day Free Trial
+                    </span>
+                </div>
+            </div>
+
+            <!-- Professional Plan (POPULAR) -->
+            <div class="plan-card bg-white rounded-2xl shadow-lg p-8 cursor-pointer border-2 border-blue-500 relative" onclick="selectPlan('professional')">
+                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <span class="bg-blue-500 text-white px-4 py-1 rounded-full text-xs font-bold">MOST POPULAR</span>
+                </div>
+                <input type="radio" name="plan" id="plan-professional" value="professional" class="hidden" checked>
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Professional</h3>
+                    <div class="mb-4">
+                        <span class="text-4xl font-bold text-gray-900">$49</span>
+                        <span class="text-gray-600">/month</span>
+                    </div>
+                    <p class="text-sm text-gray-600">Best for growing businesses</p>
+                </div>
+                
+                <ul class="space-y-3 mb-8">
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700"><strong>Everything in Starter, plus:</strong></span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700">3 business phone numbers</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700">Advanced analytics</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700">Priority support</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700">CRM integrations</span>
+                    </li>
+                </ul>
+                
+                <div class="text-center">
+                    <span class="inline-block px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
+                        14-Day Free Trial
+                    </span>
+                </div>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="plan-card bg-white rounded-2xl shadow-lg p-8 cursor-pointer border-2 border-gray-200" onclick="selectPlan('enterprise')">
+                <input type="radio" name="plan" id="plan-enterprise" value="enterprise" class="hidden">
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Enterprise</h3>
+                    <div class="mb-4">
+                        <span class="text-4xl font-bold text-gray-900">$99</span>
+                        <span class="text-gray-600">/month</span>
+                    </div>
+                    <p class="text-sm text-gray-600">For established businesses</p>
+                </div>
+                
+                <ul class="space-y-3 mb-8">
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700"><strong>Everything in Professional, plus:</strong></span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700">Unlimited phone numbers</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700">Dedicated account manager</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700">White-label options</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm text-gray-700">Custom integrations</span>
+                    </li>
+                </ul>
+                
+                <div class="text-center">
+                    <span class="inline-block px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
+                        14-Day Free Trial
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Continue Button -->
+        <div class="max-w-md mx-auto">
+            <button id="checkoutBtn" onclick="startCheckout()" 
+                    class="w-full py-4 bg-blue-600 text-white rounded-lg font-bold text-lg hover:bg-blue-700 transition-colors shadow-lg">
+                Start Free Trial →
+            </button>
+            <p class="text-center text-sm text-gray-600 mt-4">
+                No credit card required • Cancel anytime • 14-day free trial
+            </p>
+        </div>
+
+        <!-- FAQ -->
+        <div class="max-w-3xl mx-auto mt-16">
+            <h3 class="text-2xl font-bold text-center text-gray-900 mb-8">Frequently Asked Questions</h3>
+            <div class="space-y-4">
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <h4 class="font-semibold text-gray-900 mb-2">When will I be charged?</h4>
+                    <p class="text-gray-600 text-sm">You won't be charged until your 14-day free trial ends. You can cancel anytime during the trial at no cost.</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <h4 class="font-semibold text-gray-900 mb-2">Can I change plans later?</h4>
+                    <p class="text-gray-600 text-sm">Yes! You can upgrade or downgrade your plan at any time from your dashboard.</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <h4 class="font-semibold text-gray-900 mb-2">What happens after the trial?</h4>
+                    <p class="text-gray-600 text-sm">If you love the service, your chosen plan will begin and your card will be charged. If not, simply cancel before the trial ends.</p>
+                </div>
             </div>
         </div>
+
     </div>
 
-    <script>
-        const stripe = Stripe('pk_test_51SQwt1HK7i634yqwHk7EDz6BwmdULzmQEtmBWA00CzfTI1JY1lXCfDoGNMsWmSFRmMS7PsqmQRA1SQF2qeUiFREK009vtXKM4F');
+<script>
+    // Initialize Supabase
+    const SUPABASE_URL = 'https://lhtrgutiqhqbnyfkdakd.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxodHJndXRpcWhxYm55ZmtkYWtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzODk5MzMsImV4cCI6MjA3OTk2NTkzM30._j4fSrw3ybuYgdqevI-Mj-UjnbGe8rvNEF0hqe2uKC0';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Automatically redirect to Stripe checkout
-        async function redirectToCheckout() {
-            try {
-                const response = await fetch('/api/create-checkout', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        priceId: 'price_1SZBPqHK7i634yqwj1ky0V0e'
-                    })
-                });
+    // Stripe Price IDs
+    const PRICE_IDS = {
+        'starter': 'price_1SZBPqHK7i634yqwj1ky0V0e',
+        'professional': 'price_1SbBscHK7i634yqwbzFmqvxy',
+        'enterprise': 'price_1SbBtsHK7i634yqw7JHmYx8E'
+    };
 
-                const { sessionId } = await response.json();
+    let selectedPlan = 'professional'; // Default to most popular
 
-                // Redirect to Stripe checkout
-                await stripe.redirectToCheckout({ sessionId });
-            } catch (error) {
-                document.body.innerHTML = `
-                    <div class="min-h-screen flex items-center justify-center p-4">
-                        <div class="text-center">
-                            <h2 class="text-2xl font-bold text-gray-900 mb-4">Oops! Something went wrong</h2>
-                            <p class="text-gray-600 mb-4">Please contact support at support@firstcallcapture.com</p>
-                            <a href="/login.html" class="text-blue-600 hover:text-blue-500">← Back to Login</a>
-                        </div>
-                    </div>
-                `;
-            }
+    // Check if user is logged in
+    async function checkAuth() {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        
+        if (error || !user) {
+            window.location.href = '/login.html';
+            return null;
         }
+        
+        return user;
+    }
 
-        // Start redirect after 1 second
-        setTimeout(redirectToCheckout, 1000);
-    </script>
+    // Select a plan
+    function selectPlan(plan) {
+        selectedPlan = plan;
+        
+        // Remove selected class from all cards
+        document.querySelectorAll('.plan-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        
+        // Add selected class to chosen card
+        const selectedCard = document.querySelector(`#plan-${plan}`).closest('.plan-card');
+        selectedCard.classList.add('selected');
+        
+        // Update radio button
+        document.getElementById(`plan-${plan}`).checked = true;
+    }
+
+    // Start checkout process
+    async function startCheckout() {
+        const user = await checkAuth();
+        if (!user) return;
+
+        const btn = document.getElementById('checkoutBtn');
+        btn.disabled = true;
+        btn.textContent = 'Loading...';
+
+        try {
+            const priceId = PRICE_IDS[selectedPlan];
+            
+            const response = await fetch('/api/create-checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: user.email,
+                    priceId: priceId
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                throw new Error('No checkout URL received');
+            }
+        } catch (error) {
+            console.error('Checkout error:', error);
+            alert('Failed to start checkout. Please try again.');
+            btn.disabled = false;
+            btn.textContent = 'Start Free Trial →';
+        }
+    }
+
+    // Initialize
+    checkAuth();
+    selectPlan('professional'); // Select professional by default
+</script>
 
 </body>
 </html>
