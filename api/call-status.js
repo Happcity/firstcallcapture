@@ -1,0 +1,60 @@
+const { createClient } = require('@supabase/supabase-js');
+const twilio = require('twilio');
+
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
+const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
+
+export default async function handler(req, res) {
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+    try {
+        const { CallStatus, From, To, ForwardedFrom } = req.body;
+        
+        console.log('Call status webhook:', { CallStatus, From, To, ForwardedFrom });
+
+        // Only send SMS when call is completed (missed)
+        if (CallStatus === 'completed' || CallStatus === 'no-answer') {
+            
+            // The caller's number
+            const callerNumber = ForwardedFrom || From;
+            
+            // Find which customer owns this Twilio number
+            const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+            
+            const { data: customer, error } = await supabase
+                .from('customers')
+                .select('*')
+                .eq('twilio_phone_number', To)
+                .single();
+
+            if (error || !customer) {
+                console.error('Customer not found for number:', To);
+                return res.status(200).send('OK');
+            }
+
+            // Send SMS to the caller
+            const twilioClient = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+            
+            const message = customer.auto_reply_message || 
+                `Thanks for calling ${customer.business_name || 'us'}! We missed your call but will get back to you ASAP.`;
+
+            await twilioClient.messages.create({
+                from: To,
+                to: callerNumber,
+                body: message
+            });
+
+            console.log('SMS sent to:', callerNumber);
+        }
+
+        return res.status(200).send('OK');
+
+    } catch (error) {
+        console.error('Call status error:', error);
+        return res.status(200).send('OK');
+    }
+}
