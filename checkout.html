@@ -20,10 +20,6 @@
             transform: translateY(-4px);
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
         }
-        .plan-card.selected {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
@@ -44,8 +40,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             
             <!-- Starter Plan -->
-            <div class="plan-card bg-white rounded-2xl shadow-lg p-8 cursor-pointer border-2 border-gray-200" onclick="selectPlan('starter')">
-                <input type="radio" name="plan" id="plan-starter" value="starter" class="hidden">
+            <div class="plan-card bg-white rounded-2xl shadow-lg p-8 border-2 border-gray-200">
                 <div class="text-center mb-6">
                     <h3 class="text-xl font-bold text-gray-900 mb-2">Starter</h3>
                     <div class="mb-4">
@@ -82,19 +77,19 @@
                     </li>
                 </ul>
                 
-                <div class="text-center">
-                    <span class="inline-block px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
-                        14-Day Free Trial
-                    </span>
-                </div>
+                <button onclick="selectPlan('starter')" 
+                        class="w-full py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors">
+                    Select Starter Plan
+                </button>
+                
+                <p class="text-center text-xs text-gray-500 mt-3">14-day free trial included</p>
             </div>
 
             <!-- Professional Plan (POPULAR) -->
-            <div class="plan-card bg-white rounded-2xl shadow-lg p-8 cursor-pointer border-2 border-blue-500 relative" onclick="selectPlan('professional')">
+            <div class="plan-card bg-white rounded-2xl shadow-lg p-8 border-2 border-blue-500 relative">
                 <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     <span class="bg-blue-500 text-white px-4 py-1 rounded-full text-xs font-bold">MOST POPULAR</span>
                 </div>
-                <input type="radio" name="plan" id="plan-professional" value="professional" class="hidden" checked>
                 <div class="text-center mb-6">
                     <h3 class="text-xl font-bold text-gray-900 mb-2">Professional</h3>
                     <div class="mb-4">
@@ -137,16 +132,16 @@
                     </li>
                 </ul>
                 
-                <div class="text-center">
-                    <span class="inline-block px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
-                        14-Day Free Trial
-                    </span>
-                </div>
+                <button onclick="selectPlan('professional')" 
+                        class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg">
+                    Select Professional Plan
+                </button>
+                
+                <p class="text-center text-xs text-gray-500 mt-3">14-day free trial included</p>
             </div>
 
             <!-- Enterprise Plan -->
-            <div class="plan-card bg-white rounded-2xl shadow-lg p-8 cursor-pointer border-2 border-gray-200" onclick="selectPlan('enterprise')">
-                <input type="radio" name="plan" id="plan-enterprise" value="enterprise" class="hidden">
+            <div class="plan-card bg-white rounded-2xl shadow-lg p-8 border-2 border-gray-200">
                 <div class="text-center mb-6">
                     <h3 class="text-xl font-bold text-gray-900 mb-2">Enterprise</h3>
                     <div class="mb-4">
@@ -189,24 +184,14 @@
                     </li>
                 </ul>
                 
-                <div class="text-center">
-                    <span class="inline-block px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
-                        14-Day Free Trial
-                    </span>
-                </div>
+                <button onclick="selectPlan('enterprise')" 
+                        class="w-full py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors">
+                    Select Enterprise Plan
+                </button>
+                
+                <p class="text-center text-xs text-gray-500 mt-3">14-day free trial included</p>
             </div>
 
-        </div>
-
-        <!-- Continue Button -->
-        <div class="max-w-md mx-auto">
-            <button id="checkoutBtn" onclick="startCheckout()" 
-                    class="w-full py-4 bg-blue-600 text-white rounded-lg font-bold text-lg hover:bg-blue-700 transition-colors shadow-lg">
-                Start Free Trial →
-            </button>
-            <p class="text-center text-sm text-gray-600 mt-4">
-                No credit card required • Cancel anytime • 14-day free trial
-            </p>
         </div>
 
         <!-- FAQ -->
@@ -243,8 +228,6 @@
         'enterprise': 'price_1SbBtsHK7i634yqw7JHmYx8E'
     };
 
-    let selectedPlan = 'professional'; // Default to most popular
-
     // Check if user is logged in
     async function checkAuth() {
         const { data: { user }, error } = await supabase.auth.getUser();
@@ -257,34 +240,20 @@
         return user;
     }
 
-    // Select a plan
-    function selectPlan(plan) {
-        selectedPlan = plan;
-        
-        // Remove selected class from all cards
-        document.querySelectorAll('.plan-card').forEach(card => {
-            card.classList.remove('selected');
-        });
-        
-        // Add selected class to chosen card
-        const selectedCard = document.querySelector(`#plan-${plan}`).closest('.plan-card');
-        selectedCard.classList.add('selected');
-        
-        // Update radio button
-        document.getElementById(`plan-${plan}`).checked = true;
-    }
-
-    // Start checkout process
-    async function startCheckout() {
+    // Select a plan and start checkout
+    async function selectPlan(plan) {
         const user = await checkAuth();
         if (!user) return;
 
-        const btn = document.getElementById('checkoutBtn');
-        btn.disabled = true;
-        btn.textContent = 'Loading...';
+        // Disable all buttons
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            btn.textContent = 'Loading...';
+        });
 
         try {
-            const priceId = PRICE_IDS[selectedPlan];
+            const priceId = PRICE_IDS[plan];
             
             const response = await fetch('/api/create-checkout', {
                 method: 'POST',
@@ -307,14 +276,22 @@
         } catch (error) {
             console.error('Checkout error:', error);
             alert('Failed to start checkout. Please try again.');
-            btn.disabled = false;
-            btn.textContent = 'Start Free Trial →';
+            
+            // Re-enable buttons
+            buttons.forEach(btn => {
+                btn.disabled = false;
+            });
+            
+            // Restore button text
+            document.querySelectorAll('button').forEach((btn, idx) => {
+                const plans = ['Starter', 'Professional', 'Enterprise'];
+                btn.textContent = `Select ${plans[idx]} Plan`;
+            });
         }
     }
 
     // Initialize
     checkAuth();
-    selectPlan('professional'); // Select professional by default
 </script>
 
 </body>
