@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - First Call Capture</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <img src="favicon.png" alt="First Call Capture Logo" class="w-8 h-8">
+                    <span class="text-2xl font-bold text-gray-900">First Call Capture</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-600 hover:text-gray-900 font-medium">Home</a>
+                    <a href="/login.html" class="text-gray-600 hover:text-gray-900 font-medium">Sign In</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        
+        <h1 class="text-4xl font-bold text-gray-900 mb-6">About Blue Belfry Business Solutions</h1>
+        
+        <div class="prose prose-lg max-w-none">
+            
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
+                <p class="text-gray-700 mb-4">
+                    At Blue Belfry Business Solutions, we believe every customer interaction matters. We built First Call Capture to help small businesses never miss an opportunity to connect with their customers.
+                </p>
+                <p class="text-gray-700">
+                    When you're busy running your business, you can't always answer every call. But your customers deserve to know you care. That's why we created an automated system that instantly responds to missed calls with a personalized text message, keeping your leads warm until you can call them back.
+                </p>
+            </section>
+
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">What We Do</h2>
+                <p class="text-gray-700 mb-4">
+                    First Call Capture is a simple yet powerful tool designed specifically for small business owners who want to:
+                </p>
+                <ul class="list-disc pl-6 text-gray-700 space-y-2 mb-4">
+                    <li>Never lose a potential customer to a missed call</li>
+                    <li>Provide instant acknowledgment to every caller</li>
+                    <li>Keep leads engaged while they wait for a callback</li>
+                    <li>Maintain a professional image 24/7</li>
+                </ul>
+                <p class="text-gray-700">
+                    Our service works seamlessly with your existing phone system. No complicated setup, no expensive hardware - just instant peace of mind that every caller gets a response.
+                </p>
+            </section>
+
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Why We Started</h2>
+                <p class="text-gray-700 mb-4">
+                    We understand the challenges small business owners face because we've been there. Running a business means wearing many hats, and sometimes that means missing important calls from customers who need your services right now.
+                </p>
+                <p class="text-gray-700">
+                    Studies show that 80% of callers won't leave a voicemail, and most will simply call your competitor instead. We knew there had to be a better way - one that's affordable, easy to use, and actually works.
+                </p>
+            </section>
+
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Our Commitment</h2>
+                <p class="text-gray-700 mb-4">
+                    We're committed to providing small businesses with enterprise-level communication tools at an affordable price. Our platform is:
+                </p>
+                <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                    <li><strong>Simple:</strong> Set up in minutes, not hours</li>
+                    <li><strong>Reliable:</strong> Built on industry-leading Twilio infrastructure</li>
+                    <li><strong>Affordable:</strong> Transparent pricing with no hidden fees</li>
+                    <li><strong>Supportive:</strong> Real humans ready to help when you need us</li>
+                </ul>
+            </section>
+
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Get In Touch</h2>
+                <p class="text-gray-700 mb-4">
+                    We'd love to hear from you! Whether you have questions about our service, need technical support, or just want to share your success story, we're here to help.
+                </p>
+                <p class="text-gray-700">
+                    <a href="/contact.html" class="text-blue-600 hover:text-blue-700 font-semibold">Contact us</a> or email us directly at <a href="mailto:support@firstcallcapture.com" class="text-blue-600 hover:text-blue-700">support@firstcallcapture.com</a>
+                </p>
+            </section>
+
+        </div>
+
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- Footer Loader -->
+    <script>
+        fetch('/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            });
+    </script>
+
+</body>
+</html>
