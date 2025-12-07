@@ -18,6 +18,14 @@
             <div class="text-center">
                 <img src="favicon.png" alt="First Call Capture" class="w-16 h-16 mx-auto mb-4">
                 <h2 class="text-3xl font-bold text-gray-900">Create your account</h2>
+
+                <div id="selectedPlanBadge" class="hidden mt-3 inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-full">
+        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span class="text-sm font-semibold">Selected: <span id="selectedPlanName"></span></span>
+    </div>
+                
                 <p class="mt-2 text-sm text-gray-600">Or <a href="login.html" class="text-blue-600 hover:text-blue-500">sign in to existing account</a></p>
             </div>
 
@@ -253,6 +261,29 @@
         setTimeout(() => {
             window.location.href = '/verify.html';
         }, 2000);
+    });
+</script>
+
+    // Display selected plan if coming from home page
+    window.addEventListener('load', () => {
+        const selectedPlan = sessionStorage.getItem('selectedPlan');
+        if (selectedPlan) {
+            const badge = document.getElementById('selectedPlanBadge');
+            const planName = document.getElementById('selectedPlanName');
+            
+            // Capitalize plan name
+            const displayName = selectedPlan.charAt(0).toUpperCase() + selectedPlan.slice(1);
+            
+            // Set plan name with pricing
+            const pricing = {
+                'starter': '$29/mo',
+                'professional': '$49/mo',
+                'enterprise': '$99/mo'
+            };
+            
+            planName.textContent = `${displayName} Plan (${pricing[selectedPlan.toLowerCase()]})`;
+            badge.classList.remove('hidden');
+        }
     });
 </script>
     
