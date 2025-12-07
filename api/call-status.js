@@ -14,13 +14,19 @@ export default async function handler(req, res) {
     try {
         const { CallStatus, From, To, ForwardedFrom } = req.body;
         
-        console.log('Call status webhook:', { CallStatus, From, To, ForwardedFrom });
+        console.log('Call status webhook - ALL params:', req.body);
+        console.log('CallStatus:', CallStatus);
+        console.log('From:', From);
+        console.log('To:', To);
+        console.log('ForwardedFrom:', ForwardedFrom);
 
         // Only send SMS when call is completed (missed)
         if (CallStatus === 'completed' || CallStatus === 'no-answer') {
             
-            // The caller's number
-            const callerNumber = ForwardedFrom || From;
+            // The ACTUAL caller's number - prioritize From since that's who initiated
+            const callerNumber = From;
+            
+            console.log('Identified caller as:', callerNumber);
             
             // Find which customer owns this Twilio number
             const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
@@ -36,6 +42,8 @@ export default async function handler(req, res) {
                 return res.status(200).send('OK');
             }
 
+            console.log('Found customer:', customer.email, 'Business owner:', customer.user_phone_number);
+
             const twilioClient = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
             
             // MESSAGE 1: Auto-reply to the CALLER (client)
@@ -48,11 +56,11 @@ export default async function handler(req, res) {
                 body: clientMessage
             });
             
-            console.log('Auto-reply sent to caller:', callerNumber);
+            console.log('✅ Auto-reply sent to caller:', callerNumber);
 
             // MESSAGE 2: Notification to BUSINESS OWNER
             const ownerMessage = customer.owner_notification_message || 
-                `New missed call from ${callerNumber}. Tap to call back: ${callerNumber}`;
+                `New missed call from ${callerNumber}`;
             
             await twilioClient.messages.create({
                 from: To, // From Twilio number
@@ -60,13 +68,13 @@ export default async function handler(req, res) {
                 body: ownerMessage
             });
             
-            console.log('Notification sent to business owner:', customer.user_phone_number);
+            console.log('✅ Notification sent to business owner:', customer.user_phone_number);
         }
 
         return res.status(200).send('OK');
 
     } catch (error) {
-        console.error('Call status error:', error);
+        console.error('❌ Call status error:', error);
         return res.status(200).send('OK');
     }
 }
