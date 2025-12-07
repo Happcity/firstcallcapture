@@ -87,15 +87,15 @@ export default async function handler(req, res) {
             console.log('Found available number:', phoneNumberToBuy);
 
             // Purchase the number
-            const purchasedNumber = await twilioClient.incomingPhoneNumbers.create({
-                phoneNumber: phoneNumberToBuy,
-                voiceUrl: 'https://www.firstcallcapture.com/api/voice-webhook',
-                voiceMethod: 'POST',
-                statusCallback: 'https://www.firstcallcapture.com/api/call-status',
-                statusCallbackMethod: 'POST',
-                smsUrl: 'https://www.firstcallcapture.com/api/sms-webhook',
-                smsMethod: 'POST'
-            });
+const purchasedNumber = await twilioClient.incomingPhoneNumbers.create({
+    phoneNumber: phoneNumberToBuy,
+    voiceUrl: 'https://www.firstcallcapture.com/api/voice-webhook',
+    voiceMethod: 'POST',
+    statusCallback: 'https://www.firstcallcapture.com/api/call-status',
+    statusCallbackMethod: 'POST',
+    // Connect to A2P Messaging Service (required for SMS)
+    messagingServiceSid: 'MG0f9ea89c8fe16f24201ac16de37d0c45'
+});
 
             console.log('Number purchased:', purchasedNumber.phoneNumber);
 
