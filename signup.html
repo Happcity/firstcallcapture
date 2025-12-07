@@ -262,9 +262,8 @@
             window.location.href = '/verify.html';
         }, 2000);
     });
-</script>
 
-    // Display selected plan if coming from home page
+        // Display selected plan if coming from home page
     window.addEventListener('load', () => {
         const selectedPlan = sessionStorage.getItem('selectedPlan');
         if (selectedPlan) {
@@ -285,6 +284,7 @@
             badge.classList.remove('hidden');
         }
     });
+    
 </script>
     
     <!-- Footer Loader -->
