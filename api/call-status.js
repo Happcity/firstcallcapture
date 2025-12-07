@@ -36,19 +36,31 @@ export default async function handler(req, res) {
                 return res.status(200).send('OK');
             }
 
-            // Send SMS to the caller
             const twilioClient = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
             
-            const message = customer.auto_reply_message || 
+            // MESSAGE 1: Auto-reply to the CALLER (client)
+            const clientMessage = customer.auto_reply_message || 
                 `Thanks for calling ${customer.business_name || 'us'}! We missed your call but will get back to you ASAP.`;
-
+            
             await twilioClient.messages.create({
-                from: To,
-                to: callerNumber,
-                body: message
+                from: To, // From Twilio number
+                to: callerNumber, // To the person who called
+                body: clientMessage
             });
+            
+            console.log('Auto-reply sent to caller:', callerNumber);
 
-            console.log('SMS sent to:', callerNumber);
+            // MESSAGE 2: Notification to BUSINESS OWNER
+            const ownerMessage = customer.owner_notification_message || 
+                `New missed call from ${callerNumber}. Tap to call back: ${callerNumber}`;
+            
+            await twilioClient.messages.create({
+                from: To, // From Twilio number
+                to: customer.user_phone_number, // To business owner
+                body: ownerMessage
+            });
+            
+            console.log('Notification sent to business owner:', customer.user_phone_number);
         }
 
         return res.status(200).send('OK');
