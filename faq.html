@@ -6,234 +6,256 @@
     <title>FAQ - First Call Capture</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .faq-item {
-            transition: all 0.3s ease;
-        }
-        .faq-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-    </style>
 </head>
 <body class="bg-gray-50">
 
-    <!-- Header -->
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-2">
-                    <img src="favicon.png" alt="First Call Capture Logo" class="w-8 h-8">
-                    <a href="/" class="text-xl md:text-2xl font-bold text-gray-900 hover:text-blue-600">First Call Capture</a>
-                </div>
-                
-                <div class="flex items-center space-x-4">
-                    <a href="/" class="text-gray-600 hover:text-gray-900 font-medium">Home</a>
-                    <a href="/login.html" class="text-gray-600 hover:text-gray-900 font-medium">Sign In</a>
-                    <a href="/signup.html" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">
-                        Get Started
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
+    <div id="header-placeholder"></div>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
+    <section class="bg-gradient-to-br from-blue-600 to-purple-700 text-white py-20">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">Frequently Asked Questions</h1>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Frequently Asked Questions</h1>
             <p class="text-xl text-blue-100">Everything you need to know about First Call Capture</p>
         </div>
     </section>
 
     <!-- FAQ Content -->
-    <section class="py-16">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
-            <!-- Getting Started -->
-            <div class="mb-12">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Getting Started</h2>
-                <div class="space-y-4">
-                    
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">How does First Call Capture work?</h3>
-                        <p class="text-gray-600 text-sm">When someone calls your business and you can't answer, First Call Capture automatically sends them a branded SMS text message within 10 seconds. You also receive an instant notification with the caller's number and a one-tap callback button.</p>
-                    </div>
+        <!-- Getting Started -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Getting Started</h2>
+            
+            <div class="space-y-4">
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">How does First Call Capture work?</h3>
+                    <p class="text-gray-700">
+                        When someone calls your business phone and you can't answer, First Call Capture automatically sends them a personalized text message within seconds. The message lets them know you received their call and will get back to them soon. You can customize this message to match your brand and business needs.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">How long does setup take?</h3>
-                        <p class="text-gray-600 text-sm">Setup takes less than 5 minutes! Simply sign up, verify your email, choose your plan, and we'll automatically provision a dedicated phone number for your business. You can customize your messages immediately from your dashboard.</p>
-                    </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">How long does setup take?</h3>
+                    <p class="text-gray-700">
+                        Setup takes less than 5 minutes! Simply sign up, choose your plan, and we'll provide you with a dedicated phone number. Forward your missed calls to this number (we'll show you how), customize your auto-reply message, and you're ready to go. No technical knowledge required.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">Do I need to change my existing phone number?</h3>
-                        <p class="text-gray-600 text-sm">No! We provide you with a new dedicated phone number specifically for First Call Capture. You can use this as your main business line or forward calls from your existing number to it.</p>
-                    </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Do I need to change my business phone number?</h3>
+                    <p class="text-gray-700">
+                        No! You keep your existing business phone number. We provide you with a dedicated forwarding number that you'll use to forward only your missed calls. Your customers will never see or interact with this forwarding number - they only see your regular business number.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">Can I customize the messages?</h3>
-                        <p class="text-gray-600 text-sm">Absolutely! You can fully customize both your voice greeting and SMS auto-reply message from your dashboard. Include your business name, website link, and any custom text you want.</p>
-                    </div>
-
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Can I customize the auto-reply message?</h3>
+                    <p class="text-gray-700">
+                        Absolutely! You have complete control over your auto-reply message. Include your business name, hours of operation, website link, or any other information you want. You can also include your callback number so customers can easily call you back with one tap. Update your message anytime through your dashboard.
+                    </p>
                 </div>
             </div>
+        </section>
 
-            <!-- Pricing & Billing -->
-            <div class="mb-12">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Pricing & Billing</h2>
-                <div class="space-y-4">
-                    
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">When will I be charged?</h3>
-                        <p class="text-gray-600 text-sm">You won't be charged until your 14-day free trial ends. No credit card required to start the trial. You can cancel anytime during the trial at no cost.</p>
-                    </div>
+        <!-- Pricing & Billing -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Pricing & Billing</h2>
+            
+            <div class="space-y-4">
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">When will I be charged?</h3>
+                    <p class="text-gray-700">
+                        You won't be charged during your 14-day free trial. After the trial ends, you'll be billed monthly on the anniversary of your subscription start date. All subscriptions are month-to-month with no long-term contracts.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">Can I change plans later?</h3>
-                        <p class="text-gray-600 text-sm">Yes! You can upgrade or downgrade your plan at any time from your dashboard. Changes take effect immediately, and billing is prorated automatically.</p>
-                    </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Can I change my plan later?</h3>
+                    <p class="text-gray-700">
+                        Yes! You can upgrade or downgrade your plan at any time through your dashboard. Upgrades take effect immediately. Downgrades take effect at the start of your next billing cycle. We'll prorate any credits or additional charges.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">What happens after the trial?</h3>
-                        <p class="text-gray-600 text-sm">If you love the service, your chosen plan will begin and your card will be charged monthly. If not, simply cancel before the trial ends and you won't be charged anything.</p>
-                    </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Is the 14-day trial really free?</h3>
+                    <p class="text-gray-700">
+                        Yes! The 14-day trial is completely free with no credit card required upfront. You'll get full access to all features during the trial period. If you decide First Call Capture isn't right for you, simply don't subscribe and you won't be charged anything.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">Do you offer refunds?</h3>
-                        <p class="text-gray-600 text-sm">Yes! We offer a 30-day money-back guarantee. If you're not satisfied with First Call Capture for any reason, contact us within 30 days of your first payment for a full refund.</p>
-                    </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">What's your refund policy?</h3>
+                    <p class="text-gray-700">
+                        We offer a 30-day money-back guarantee. If you're not satisfied with First Call Capture for any reason within the first 30 days of your paid subscription, contact us and we'll issue a full refund. No questions asked.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">Are there any hidden fees?</h3>
-                        <p class="text-gray-600 text-sm">No hidden fees! Your monthly subscription includes your phone number, unlimited SMS during our launch promotion, and all core features. Add-ons are clearly priced and completely optional.</p>
-                    </div>
-
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Are there any hidden fees?</h3>
+                    <p class="text-gray-700">
+                        No hidden fees! The price you see is the price you pay. All plans include your dedicated phone number, unlimited SMS auto-replies during our launch promotion, and access to your dashboard and analytics. Payment processing is handled securely by Stripe.
+                    </p>
                 </div>
             </div>
+        </section>
 
-            <!-- Features & Functionality -->
-            <div class="mb-12">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Features & Functionality</h2>
-                <div class="space-y-4">
-                    
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">What's included in the Starter plan?</h3>
-                        <p class="text-gray-600 text-sm">The Starter plan includes 1 dedicated phone number, up to 150 calls/month (unlimited during launch), unlimited auto-reply SMS, custom voice and SMS messages, one-tap callback, and dashboard management.</p>
-                    </div>
+        <!-- Features & Functionality -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Features & Functionality</h2>
+            
+            <div class="space-y-4">
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">What features are included in the Starter plan?</h3>
+                    <p class="text-gray-700">
+                        The Starter plan includes: 1 dedicated phone number, unlimited auto-reply SMS (during launch promotion), dashboard management, call count tracking, messages sent tracking, SMS notifications to you when someone calls, customizable SMS and voice messages, one-tap callback links, and website links in SMS.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">How quickly are texts sent?</h3>
-                        <p class="text-gray-600 text-sm">Texts are sent automatically within 10 seconds of a missed call. This immediate response keeps your leads warm and shows professionalism.</p>
-                    </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">How fast are the text messages sent?</h3>
+                    <p class="text-gray-700">
+                        Text messages are sent within 2-5 seconds after a missed call. Our system is built on Twilio's industry-leading infrastructure to ensure reliable, fast delivery. The exact timing may vary slightly based on the caller's mobile carrier.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">Can I add multiple phone numbers?</h3>
-                        <p class="text-gray-600 text-sm">Each subscription includes 1 phone number. If you need multiple numbers (for different locations or departments), simply add additional subscriptions through your dashboard.</p>
-                    </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Can I use multiple phone numbers?</h3>
+                    <p class="text-gray-700">
+                        Each subscription plan includes one dedicated phone number. If you need multiple numbers (for different locations, departments, or businesses), you can subscribe to additional plans. Each plan operates independently with its own settings and analytics.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">Does it work with voicemail?</h3>
-                        <p class="text-gray-600 text-sm">Yes! First Call Capture works alongside your voicemail. Even if callers leave a message, they'll still receive the instant SMS response, increasing your chances of converting them.</p>
-                    </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">What happens if someone leaves a voicemail?</h3>
+                    <p class="text-gray-700">
+                        If a caller leaves a voicemail on your regular business line before the call forwards to First Call Capture, they'll still receive the auto-reply text. This ensures every caller gets acknowledgment, whether they leave a voicemail or not.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">Can customers reply to the SMS?</h3>
-                        <p class="text-gray-600 text-sm">Yes! Your auto-reply creates a two-way SMS conversation. When customers reply, you can respond directly from your phone or dashboard.</p>
-                    </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Can callers reply to the auto-text?</h3>
+                    <p class="text-gray-700">
+                        Yes! Callers can reply to the text message. You'll receive an SMS notification with their response, and you can continue the conversation via text or call them back directly. This creates a seamless two-way communication channel with your customers.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">What analytics do you provide?</h3>
-                        <p class="text-gray-600 text-sm">Professional and Business plans include call tracking, timestamp logs, phone number history, missed call reports, average response time tracking, and weekly email summaries.</p>
-                    </div>
-
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">What analytics and reporting do you provide?</h3>
+                    <p class="text-gray-700">
+                        All plans include basic analytics like call count and messages sent. Professional and Business plans add call timestamps, phone number history, missed call reports, average response time tracking, and weekly email summaries. Business plans also include caller location tracking and monthly performance reviews.
+                    </p>
                 </div>
             </div>
+        </section>
 
-            <!-- Add-Ons & Integrations -->
-            <div class="mb-12">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Add-Ons & Integrations</h2>
-                <div class="space-y-4">
-                    
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">What is the AI Voice Assistant?</h3>
-                        <p class="text-gray-600 text-sm">The AI Voice Assistant ($199/mo) can actually answer calls like a human, take detailed messages, answer frequently asked questions, and transfer calls to you when needed. It handles up to 100 calls per month.</p>
-                    </div>
+        <!-- Add-Ons & Integrations -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Add-Ons & Integrations</h2>
+            
+            <div class="space-y-4">
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">What is the AI Voice Assistant add-on?</h3>
+                    <p class="text-gray-700">
+                        Our AI Voice Assistant (coming soon) can actually answer calls, take messages, answer FAQs about your business, schedule appointments, and transfer calls to a human when needed. It handles up to 100 calls per month and provides natural, conversational interactions with your callers.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">How does Zapier integration work?</h3>
-                        <p class="text-gray-600 text-sm">The Zapier integration ($29/mo) connects First Call Capture to 6,000+ apps including Google Sheets, Slack, email marketing tools, and more. Automatically trigger actions when you receive missed calls.</p>
-                    </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">How does Zapier integration work?</h3>
+                    <p class="text-gray-700">
+                        The Zapier integration (coming soon) connects First Call Capture with 6,000+ apps including Gmail, Slack, Google Sheets, and more. Create unlimited automations like adding missed calls to your CRM, sending notifications to your team, or logging calls in a spreadsheet - all without coding.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">Which CRMs do you integrate with?</h3>
-                        <p class="text-gray-600 text-sm">Our CRM integration ($49/mo per CRM) works with HubSpot, Salesforce, Pipedrive, and other major platforms. Automatically create contacts, sync call history, and keep your pipeline updated.</p>
-                    </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Which CRMs can you integrate with?</h3>
+                    <p class="text-gray-700">
+                        Our CRM integration (coming soon) supports HubSpot, Salesforce, and other major platforms. When enabled, missed calls automatically create new contacts in your CRM with caller information, call details, and timestamps. Each CRM integration is $49/month and syncs in real-time.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">When will add-ons be available?</h3>
-                        <p class="text-gray-600 text-sm">Add-ons are currently in development. Early customers will get priority access and special launch pricing. Sign up now to be notified when they're ready!</p>
-                    </div>
-
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">When will add-ons be available?</h3>
+                    <p class="text-gray-700">
+                        We're building add-ons based on customer demand. If you're interested in a specific add-on, let us know! We prioritize development based on what our customers need most. Sign up for our newsletter to be notified when new features launch.
+                    </p>
                 </div>
             </div>
+        </section>
 
-            <!-- Technical & Support -->
-            <div class="mb-12">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Technical & Support</h2>
-                <div class="space-y-4">
-                    
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">Is my data secure?</h3>
-                        <p class="text-gray-600 text-sm">Absolutely! We use bank-level encryption for all data transmission and storage. Your customer information is never shared with third parties and is stored securely in compliance with GDPR and CCPA regulations.</p>
-                    </div>
+        <!-- Technical & Support -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Technical & Support</h2>
+            
+            <div class="space-y-4">
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Is my data secure?</h3>
+                    <p class="text-gray-700">
+                        Yes! We take security seriously. All data is encrypted in transit and at rest. Payment information is processed securely through Stripe (we never store your credit card details). Our infrastructure is built on industry-leading platforms including Twilio and Supabase. We're compliant with all major data protection regulations.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">What kind of support do you offer?</h3>
-                        <p class="text-gray-600 text-sm">All plans include email support. Professional plans get priority response within 4 hours. Business plans include monthly performance reviews and dedicated account support.</p>
-                    </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">What kind of support do you offer?</h3>
+                    <p class="text-gray-700">
+                        All plans include email support with responses typically within 24 hours during business days. We provide setup assistance, troubleshooting help, and answers to any questions. Our knowledge base and FAQ are available 24/7 for instant answers to common questions.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">Can I export my data?</h3>
-                        <p class="text-gray-600 text-sm">Yes! You can export all your call logs, messages, and analytics data at any time in CSV format from your dashboard.</p>
-                    </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Can I export my call data?</h3>
+                    <p class="text-gray-700">
+                        Yes! You can export your call history and analytics data at any time through your dashboard. Data is exported in CSV format which can be opened in Excel, Google Sheets, or imported into other systems. You own your data and can take it with you if you cancel.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">What if I need help setting up?</h3>
-                        <p class="text-gray-600 text-sm">We're here to help! Contact our support team at support@firstcallcapture.com or use the live chat in your dashboard. Professional and Business customers can schedule onboarding calls.</p>
-                    </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Do you offer setup assistance?</h3>
+                    <p class="text-gray-700">
+                        Absolutely! While setup is designed to be simple and self-service, we're happy to help if you need it. Contact us at support@firstcallcapture.com and we'll walk you through the entire setup process. We can also help with call forwarding configuration for your specific phone system.
+                    </p>
+                </div>
 
-                    <div class="faq-item bg-white rounded-lg p-6 shadow-sm">
-                        <h3 class="font-semibold text-gray-900 mb-2">Is there a mobile app?</h3>
-                        <p class="text-gray-600 text-sm">The dashboard is fully mobile-responsive and works great in any web browser. Native iOS and Android apps are on our roadmap for 2026!</p>
-                    </div>
-
+                <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Is there a mobile app?</h3>
+                    <p class="text-gray-700">
+                        Currently, First Call Capture is accessible through any web browser on desktop or mobile devices. Our dashboard is fully responsive and works great on phones and tablets. A dedicated mobile app is on our roadmap based on customer feedback.
+                    </p>
                 </div>
             </div>
+        </section>
 
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Still Have Questions?</h2>
-            <p class="text-xl text-blue-100 mb-8">Our team is here to help you get started</p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="/contact.html" class="px-8 py-4 bg-white text-blue-600 rounded-lg font-semibold text-lg hover:bg-gray-100 shadow-lg">
+        <!-- CTA Section -->
+        <section class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-12 text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Still have questions?</h2>
+            <p class="text-xl text-gray-600 mb-8">We're here to help! Contact us or start your free trial today.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/contact.html" class="px-8 py-3 bg-white text-blue-600 border-2 border-blue-600 rounded-lg font-semibold hover:bg-blue-50">
                     Contact Us
                 </a>
-                <a href="/signup.html" class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg font-semibold text-lg hover:bg-white hover:text-blue-600">
+                <a href="/signup.html" class="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700">
                     Start Free Trial
                 </a>
             </div>
-        </div>
-    </section>
+        </section>
+
+    </main>
 
     <div id="footer-placeholder"></div>
+
+    <!-- Header Loader -->
+    <script>
+        fetch('/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                // Initialize mobile menu after header loads
+                document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+                    const menu = document.getElementById('mobile-menu');
+                    menu.classList.toggle('hidden');
+                });
+            });
+    </script>
 
     <!-- Footer Loader -->
     <script>
