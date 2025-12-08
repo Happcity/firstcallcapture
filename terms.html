@@ -8,23 +8,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50">
-    
-    <!-- Header -->
-    <header class="bg-white border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-2">
-                    <img src="favicon.png" alt="First Call Capture Logo" class="w-8 h-8">
-                    <span class="text-2xl font-bold text-gray-900">First Call Capture</span>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="/" class="text-gray-600 hover:text-gray-900 font-medium">Home</a>
-                    <a href="/login.html" class="text-gray-600 hover:text-gray-900 font-medium">Sign In</a>
-                </div>
-            </div>
-        </div>
-    </header>
 
+    <div id="header-placeholder"></div>
+    
     <!-- Main Content -->
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         
@@ -193,7 +179,21 @@
     </main>
 
     <div id="footer-placeholder"></div>
-
+    
+    <!-- Header Loader -->
+    <script>
+        fetch('/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                // Initialize mobile menu after header loads
+                document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+                    const menu = document.getElementById('mobile-menu');
+                    menu.classList.toggle('hidden');
+                });
+            });
+    </script>
+    
     <!-- Footer Loader -->
     <script>
         fetch('/footer.html')
