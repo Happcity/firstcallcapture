@@ -8,157 +8,78 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50">
-    
-    <!-- Header -->
-    <header class="bg-white border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-2">
-                    <img src="favicon.png" alt="First Call Capture Logo" class="w-8 h-8">
-                    <span class="text-2xl font-bold text-gray-900">First Call Capture</span>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <a href="/" class="text-gray-600 hover:text-gray-900 font-medium">Home</a>
-                    <a href="/login.html" class="text-gray-600 hover:text-gray-900 font-medium">Sign In</a>
-                </div>
-            </div>
-        </div>
-    </header>
+
+    <div id="header-placeholder"></div>
 
     <!-- Main Content -->
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         
-        <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">Get In Touch</h1>
-            <p class="text-xl text-gray-600">We're here to help! Reach out with any questions or concerns.</p>
-        </div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-6">Contact Us</h1>
+        <p class="text-xl text-gray-600 mb-12">Have questions? We're here to help!</p>
 
         <div class="grid md:grid-cols-2 gap-12">
             
-            <!-- Contact Info -->
-            <div>
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Contact Information</h2>
-                
-                <div class="space-y-6">
-                    
-                    <!-- Email -->
-                    <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0">
-                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900 mb-1">Email</h3>
-                            <a href="mailto:support@firstcallcapture.com" class="text-blue-600 hover:text-blue-700">
-                                support@firstcallcapture.com
-                            </a>
-                            <p class="text-sm text-gray-600 mt-1">We typically respond within 24 hours</p>
-                        </div>
-                    </div>
-
-                    <!-- Support Hours -->
-                    <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0">
-                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900 mb-1">Support Hours</h3>
-                            <p class="text-gray-700">Monday - Friday: 9am - 6pm EST</p>
-                            <p class="text-gray-700">Saturday - Sunday: 10am - 4pm EST</p>
-                        </div>
-                    </div>
-
-                    <!-- Address -->
-                    <div class="flex items-start space-x-4">
-                        <div class="flex-shrink-0">
-                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold text-gray-900 mb-1">Company</h3>
-                            <p class="text-gray-700">Blue Belfry Business Solutions</p>
-                            <p class="text-sm text-gray-600 mt-1">Atlanta, Georgia</p>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- FAQ Link -->
-                <div class="mt-8 p-6 bg-blue-50 border border-blue-200 rounded-lg">
-                    <h3 class="font-semibold text-gray-900 mb-2">Looking for quick answers?</h3>
-                    <p class="text-sm text-gray-700 mb-3">Check out our FAQ section on the homepage for common questions about setup, pricing, and features.</p>
-                    <a href="/#faq" class="text-blue-600 hover:text-blue-700 font-medium text-sm">View FAQ →</a>
-                </div>
-
-            </div>
-
             <!-- Contact Form -->
-            <div>
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
-                
-                <form id="contactForm" class="space-y-4">
+            <div class="bg-white rounded-lg shadow-sm p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Send us a message</h2>
+                <form id="contact-form" class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                        <input type="text" id="name" name="name" required 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
                     
                     <div>
-                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                        <input type="text" id="name" name="name" required
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               placeholder="Your name">
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" id="email" name="email" required 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
-
+                    
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                        <input type="email" id="email" name="email" required
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               placeholder="you@company.com">
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone (optional)</label>
+                        <input type="tel" id="phone" name="phone" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
-
+                    
                     <div>
-                        <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-                        <select id="subject" name="subject" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="">Select a topic...</option>
-                            <option value="general">General Question</option>
-                            <option value="support">Technical Support</option>
-                            <option value="billing">Billing Question</option>
-                            <option value="sales">Sales Inquiry</option>
-                            <option value="feedback">Feedback</option>
-                        </select>
+                        <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                        <textarea id="message" name="message" rows="5" required 
+                                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
                     </div>
-
-                    <div>
-                        <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                        <textarea id="message" name="message" rows="6" required
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                                  placeholder="How can we help you?"></textarea>
-                    </div>
-
-                    <div id="formSuccess" class="hidden bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
-                        ✓ Message sent! We'll get back to you within 24 hours.
-                    </div>
-
-                    <div id="formError" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                    </div>
-
-                    <button type="submit" id="submitBtn"
-                            class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                    
+                    <button type="submit" 
+                            class="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700">
                         Send Message
                     </button>
-
                 </form>
+                
+                <div id="form-message" class="mt-4 hidden"></div>
+            </div>
 
-                <p class="text-xs text-gray-500 mt-4 text-center">
-                    By submitting this form, you agree to our <a href="/privacy.html" class="text-blue-600 hover:text-blue-700">Privacy Policy</a>
-                </p>
+            <!-- Contact Info -->
+            <div class="space-y-8">
+                
+                <div class="bg-white rounded-lg shadow-sm p-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Email Us</h3>
+                    <p class="text-gray-600 mb-2">For support and general inquiries:</p>
+                    <a href="mailto:support@firstcallcapture.com" class="text-blue-600 hover:text-blue-700 font-semibold">
+                        support@firstcallcapture.com
+                    </a>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm p-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Response Time</h3>
+                    <p class="text-gray-600">
+                        We typically respond to all inquiries within 24 hours during business days (Monday-Friday).
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm p-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Before You Contact Us</h3>
+                    <p class="text-gray-600 mb-4">
+                        Check out our <a href="/faq.html" class="text-blue-600 hover:text-blue-700 font-semibold">FAQ page</a> for quick answers to common questions.
+                    </p>
+                </div>
 
             </div>
 
@@ -168,40 +89,38 @@
 
     <div id="footer-placeholder"></div>
 
+    <!-- Contact Form Handler -->
     <script>
-        // Simple contact form handler (mailto fallback for now)
-        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const submitBtn = document.getElementById('submitBtn');
-            const successDiv = document.getElementById('formSuccess');
-            const errorDiv = document.getElementById('formError');
+            const formMessage = document.getElementById('form-message');
+            formMessage.className = 'mt-4 p-4 rounded-lg bg-green-50 border border-green-200 text-green-800';
+            formMessage.textContent = 'Thank you for your message! We\'ll get back to you within 24 hours.';
+            formMessage.classList.remove('hidden');
             
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Sending...';
-            successDiv.classList.add('hidden');
-            errorDiv.classList.add('hidden');
+            // Reset form
+            this.reset();
             
-            const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                subject: document.getElementById('subject').value,
-                message: document.getElementById('message').value
-            };
-            
-            // For now, use mailto as fallback
-            const mailtoLink = `mailto:support@firstcallcapture.com?subject=${encodeURIComponent(formData.subject + ' - ' + formData.name)}&body=${encodeURIComponent('From: ' + formData.email + '\n\n' + formData.message)}`;
-            
-            window.location.href = mailtoLink;
-            
-            // Show success message
+            // Hide message after 5 seconds
             setTimeout(() => {
-                successDiv.classList.remove('hidden');
-                document.getElementById('contactForm').reset();
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Send Message';
-            }, 1000);
+                formMessage.classList.add('hidden');
+            }, 5000);
         });
+    </script>
+
+    <!-- Header Loader -->
+    <script>
+        fetch('/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                // Initialize mobile menu after header loads
+                document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+                    const menu = document.getElementById('mobile-menu');
+                    menu.classList.toggle('hidden');
+                });
+            });
     </script>
 
     <!-- Footer Loader -->
