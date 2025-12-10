@@ -51,7 +51,7 @@ export default async function handler(req, res) {
                 `Thanks for calling ${customer.business_name || 'us'}! We missed your call but will get back to you ASAP.`;
             
             await twilioClient.messages.create({
-                from: To, // From Twilio number
+                messagingServiceSid: 'MG0f9ea89c8fe16f24201ac16de37d0c45', // A2P Messaging Service
                 to: callerNumber, // To the person who called
                 body: clientMessage
             });
@@ -63,7 +63,7 @@ export default async function handler(req, res) {
                 `New missed call from ${callerNumber}`;
             
             await twilioClient.messages.create({
-                from: To, // From Twilio number
+                messagingServiceSid: 'MG0f9ea89c8fe16f24201ac16de37d0c45', // A2P Messaging Service
                 to: customer.user_phone_number, // To business owner
                 body: ownerMessage
             });
