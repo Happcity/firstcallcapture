@@ -212,7 +212,7 @@
                         </svg>
                     </div>
                     <h3 class="text-lg font-bold text-gray-900 mb-2">AI Voice Assistant</h3>
-                    <p class="text-2xl font-bold text-purple-600 mb-3">$299<span class="text-sm font-normal text-gray-600">/mo</span></p>
+                    <p class="text-2xl font-bold text-purple-600 mb-3">$199<span class="text-sm font-normal text-gray-600">/mo</span></p>
                     <ul class="space-y-2 text-sm text-gray-600 mb-4">
                         <li>• Up to 100 AI calls/month</li>
                         <li>• Takes messages</li>
@@ -310,6 +310,9 @@
     const SUPABASE_URL = 'https://lhtrgutiqhqbnyfkdakd.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxodHJndXRpcWhxYm55ZmtkYWtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzODk5MzMsImV4cCI6MjA3OTk2NTkzM30._j4fSrw3ybuYgdqevI-Mj-UjnbGe8rvNEF0hqe2uKC0';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Initialize Stripe - Blue Belfry Inc. Account
+    const stripe = Stripe('pk_test_51ScQiZKcos9FHYDIBOsxzZqVLmAUKciOz1NQmOxanWd094hIUJQkyxuBCg7melWVFtwhn18xrCOE1zNkB7ZDUn5B00XrRv2Q08');
 
     // NEW STRIPE PRICE IDs - Blue Belfry Inc. Account
     const PRICE_IDS = {
