@@ -107,13 +107,11 @@
                     // Show success and redirect
                     document.getElementById('successMessage').classList.remove('hidden');
                     
-                    // Refresh session before redirect
-                    await supabase.auth.refreshSession();
-                    const { data: { user: refreshedUser } } = await supabase.auth.getUser();
-                    console.log('✅ Email verified user:', refreshedUser?.email);
+                    console.log('✅ Email verified user:', user.email);
                     
+                    // Pass email to checkout via URL parameter
                     setTimeout(() => {
-                        window.location.href = '/checkout.html';
+                        window.location.href = `/checkout.html?email=${encodeURIComponent(user.email)}`;
                     }, 2000);
                 }
             }
@@ -142,9 +140,9 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ 
-    code: code,
-    phoneNumber: sessionStorage.getItem('verificationPhone')
-})
+                    code: code,
+                    phoneNumber: sessionStorage.getItem('verificationPhone')
+                })
             });
             
             const data = await response.json();
@@ -161,14 +159,28 @@
             successDiv.classList.remove('hidden');
             submitBtn.textContent = 'Verified! ✓';
             
-            // Refresh Supabase session to ensure we have the correct user
-            await supabase.auth.refreshSession();
-            const { data: { user } } = await supabase.auth.getUser();
-            console.log('✅ Verified user session:', user?.email);
+            // Get the customer email by phone number (not from session - session might be stale)
+            const phoneNumber = sessionStorage.getItem('verificationPhone');
+            const { data: customer, error: customerError } = await supabase
+                .from('customers')
+                .select('email')
+                .eq('user_phone_number', phoneNumber)
+                .single();
             
-            // Redirect to checkout after 2 seconds
+            if (customerError || !customer) {
+                console.error('Could not find customer:', customerError);
+                errorDiv.textContent = 'Verification successful but could not proceed. Please contact support.';
+                errorDiv.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Verify Code';
+                return;
+            }
+            
+            console.log('✅ Verified customer email:', customer.email);
+            
+            // Pass email to checkout via URL parameter (ensures correct email is used)
             setTimeout(() => {
-                window.location.href = '/checkout.html';
+                window.location.href = `/checkout.html?email=${encodeURIComponent(customer.email)}`;
             }, 2000);
             
         } catch (error) {
