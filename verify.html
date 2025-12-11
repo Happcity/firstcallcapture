@@ -159,28 +159,23 @@
             successDiv.classList.remove('hidden');
             submitBtn.textContent = 'Verified! ✓';
             
-            // Get the customer email by phone number (not from session - session might be stale)
-            const phoneNumber = sessionStorage.getItem('verificationPhone');
-            const { data: customer, error: customerError } = await supabase
-                .from('customers')
-                .select('email')
-                .eq('user_phone_number', phoneNumber)
-                .single();
+            // Get the logged-in user's email (they just signed up and are logged in)
+            const { data: { user }, error: userError } = await supabase.auth.getUser();
             
-            if (customerError || !customer) {
-                console.error('Could not find customer:', customerError);
-                errorDiv.textContent = 'Verification successful but could not proceed. Please contact support.';
+            if (userError || !user) {
+                console.error('Could not get logged-in user:', userError);
+                errorDiv.textContent = 'Verification successful but session error. Please log in again.';
                 errorDiv.classList.remove('hidden');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Verify Code';
                 return;
             }
             
-            console.log('✅ Verified customer email:', customer.email);
+            console.log('✅ Verified user email from session:', user.email);
             
             // Pass email to checkout via URL parameter (ensures correct email is used)
             setTimeout(() => {
-                window.location.href = `/checkout.html?email=${encodeURIComponent(customer.email)}`;
+                window.location.href = `/checkout.html?email=${encodeURIComponent(user.email)}`;
             }, 2000);
             
         } catch (error) {
