@@ -3,306 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Choose Your Plan - First Call Capture</title>
+    <title>Verify Your Account - First Call Capture</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://js.stripe.com/v3/"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .plan-card {
-            transition: all 0.3s ease;
-        }
-        .plan-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-        }
-    </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
-
-    <div id="header-placeholder"></div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-
-        <!-- Main Pricing Tiers -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+<body class="bg-gray-50">
+    
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
             
-            <!-- Starter Plan -->
-            <div class="plan-card bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl shadow-lg p-8 border-2 border-blue-100 flex flex-col">
-                <div class="text-center mb-6">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Starter</h3>
-                    <div class="mb-4">
-                        <span class="text-4xl font-bold text-gray-900">$29</span>
-                        <span class="text-gray-600">/month</span>
-                    </div>
-                    <p class="text-sm text-gray-600">Perfect for small businesses</p>
-                </div>
-                
-                <ul class="space-y-3 mb-8 flex-grow">
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-gray-700">1 dedicated phone number</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-gray-700">Up to 150 calls/month</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-gray-700">Custom voice & SMS messages</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-gray-700">One-tap callback</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-gray-700">Dashboard management</span>
-                    </li>
-                </ul>
-                
-                <div class="mt-auto">
-                    <button onclick="selectPlan('starter')" 
-                            class="w-full py-3 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
-                        Select Starter Plan
-                    </button>
-                    <p class="text-center text-sm text-gray-600 mt-3">14-Day FREE Trial • Cancel Anytime</p>
-                </div>
+            <!-- Logo & Title -->
+            <div class="text-center">
+                <img src="favicon.png" alt="First Call Capture" class="w-16 h-16 mx-auto mb-4">
+                <h2 class="text-3xl font-bold text-gray-900">Verify Your Account</h2>
+                <p class="mt-2 text-sm text-gray-600">We sent you an email AND a text message</p>
             </div>
 
-            <!-- Professional Plan (POPULAR) -->
-            <div class="plan-card bg-blue-600 rounded-2xl shadow-lg p-8 relative flex flex-col">
-                <div class="absolute top-0 right-0 bg-yellow-400 text-gray-900 px-4 py-1 rounded-bl-lg rounded-tr-xl text-sm font-bold">
-                    POPULAR
-                </div>
-                <div class="text-center mb-6">
-                    <h3 class="text-2xl font-bold text-white mb-2">Professional</h3>
-                    <div class="mb-4">
-                        <span class="text-4xl font-bold text-white">$49</span>
-                        <span class="text-blue-100">/month</span>
+            <!-- Verification Options -->
+            <div class="bg-white rounded-xl shadow-md p-8 space-y-6">
+                
+                <!-- Option 1: Email Link -->
+                <div class="border-b border-gray-200 pb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Option 1: Email Link</h3>
+                    <p class="text-sm text-gray-600 mb-4">Click the verification link in your email</p>
+                    <div class="flex items-center space-x-2 text-blue-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        <span class="text-sm font-medium">Check your inbox</span>
                     </div>
-                    <p class="text-sm text-blue-100">Best for growing businesses</p>
                 </div>
-                
-                <ul class="space-y-3 mb-8 flex-grow">
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-yellow-400 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-white font-semibold">Everything in Starter, plus:</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-yellow-400 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-white">Up to 350 calls/month</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-yellow-400 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-white">Call tracking & analytics</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-yellow-400 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-white">Weekly email summaries</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-yellow-400 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-white">Multiple message templates</span>
-                    </li>
-                </ul>
-                
-                <div class="mt-auto">
-                    <button onclick="selectPlan('professional')" 
-                            class="w-full py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg">
-                        Select Professional Plan
-                    </button>
-                    <p class="text-center text-sm text-white mt-3">14-Day FREE Trial • Cancel Anytime</p>
+
+                <!-- Option 2: SMS Code -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Option 2: Text Message Code</h3>
+                    <p class="text-sm text-gray-600 mb-4">Enter the 6-digit code from your text message</p>
+                    
+                    <form id="verifyForm" class="space-y-4">
+                        <div>
+                            <label for="verificationCode" class="block text-sm font-medium text-gray-700 mb-1">Verification Code</label>
+                            <input id="verificationCode" name="verificationCode" type="text" maxlength="6" required 
+                                   class="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 text-center text-2xl tracking-widest font-mono focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                   placeholder="000000">
+                        </div>
+
+                        <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+                        </div>
+
+                        <div id="successMessage" class="hidden bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg text-sm">
+                            Verification successful! Redirecting to checkout...
+                        </div>
+
+                        <button type="submit" 
+                                class="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Verify Code
+                        </button>
+                    </form>
+
+                    <p class="mt-3 text-xs text-gray-500 text-center">
+                        💡 No SMS charges apply to you
+                    </p>
                 </div>
+
             </div>
 
-            <!-- Business Plan -->
-            <div class="plan-card bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl shadow-lg p-8 border-2 border-blue-100 flex flex-col">
-                <div class="text-center mb-6">
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Business</h3>
-                    <div class="mb-4">
-                        <span class="text-4xl font-bold text-gray-900">$99</span>
-                        <span class="text-gray-600">/month</span>
-                    </div>
-                    <p class="text-sm text-gray-600">For established businesses</p>
-                </div>
-                
-                <ul class="space-y-3 mb-8 flex-grow">
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-gray-700 font-semibold">Everything in Professional, plus:</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-gray-700">Up to 800 calls/month</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-gray-700">Caller location tracking</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-gray-700">Advanced analytics & reporting</span>
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="text-sm text-gray-700">Monthly performance reviews</span>
-                    </li>
-                </ul>
-                
-                <div class="mt-auto">
-                    <button onclick="selectPlan('business')" 
-                            class="w-full py-3 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
-                        Select Business Plan
-                    </button>
-                    <p class="text-center text-sm text-gray-600 mt-3">14-Day FREE Trial • Cancel Anytime</p>
-                </div>
+            <!-- Didn't receive codes? -->
+            <div class="text-center">
+                <p class="text-sm text-gray-600">
+                    Didn't receive anything? 
+                    <a href="mailto:support@firstcallcapture.com" class="text-blue-600 hover:text-blue-500">Contact support</a>
+                </p>
             </div>
 
         </div>
-
-        <!-- Add-Ons Section -->
-        <div class="mb-12">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">Powerful Add-Ons</h2>
-                <p class="text-gray-600">Enhance any plan with these premium features</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <!-- AI Voice Assistant -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border-2 border-purple-200 hover:border-purple-400 transition-all">
-                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">AI Voice Assistant</h3>
-                    <p class="text-2xl font-bold text-purple-600 mb-3">$199<span class="text-sm font-normal text-gray-600">/mo</span></p>
-                    <ul class="space-y-2 text-sm text-gray-600 mb-4">
-                        <li>• Up to 100 AI calls/month</li>
-                        <li>• Takes messages</li>
-                        <li>• Answers FAQs</li>
-                        <li>• Transfers to human</li>
-                    </ul>
-                    <button class="w-full py-2 bg-purple-100 text-purple-700 rounded-lg font-semibold hover:bg-purple-200 transition-colors text-sm">
-                        Coming Soon
-                    </button>
-                </div>
-
-                <!-- Zapier Integration -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border-2 border-orange-200 hover:border-orange-400 transition-all">
-                    <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">Zapier Integration</h3>
-                    <p class="text-2xl font-bold text-orange-600 mb-3">$29<span class="text-sm font-normal text-gray-600">/mo</span></p>
-                    <ul class="space-y-2 text-sm text-gray-600 mb-4">
-                        <li>• Choose from 6,000+ apps</li>
-                        <li>• Unlimited automations</li>
-                        <li>• Webhook support</li>
-                        <li>• Real-time sync</li>
-                    </ul>
-                    <button class="w-full py-2 bg-orange-100 text-orange-700 rounded-lg font-semibold hover:bg-orange-200 transition-colors text-sm">
-                        Coming Soon
-                    </button>
-                </div>
-
-                <!-- CRM Integration -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border-2 border-blue-200 hover:border-blue-400 transition-all">
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">CRM Integration</h3>
-                    <p class="text-2xl font-bold text-blue-600 mb-3">$49<span class="text-sm font-normal text-gray-600">/mo</span></p>
-                    <ul class="space-y-2 text-sm text-gray-600 mb-4">
-                        <li>• HubSpot, Salesforce</li>
-                        <li>• Auto-create contacts</li>
-                        <li>• Sync call history</li>
-                        <li>• Two-way sync</li>
-                    </ul>
-                    <button class="w-full py-2 bg-blue-100 text-blue-700 rounded-lg font-semibold hover:bg-blue-200 transition-colors text-sm">
-                        Coming Soon
-                    </button>
-                </div>
-
-                <!-- Calendar Integration -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border-2 border-green-200 hover:border-green-400 transition-all">
-                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">Calendar Integration</h3>
-                    <p class="text-2xl font-bold text-green-600 mb-3">$29<span class="text-sm font-normal text-gray-600">/mo</span></p>
-                    <ul class="space-y-2 text-sm text-gray-600 mb-4">
-                        <li>• Google Calendar</li>
-                        <li>• Microsoft Outlook</li>
-                        <li>• Auto-create events</li>
-                        <li>• Schedule callbacks</li>
-                    </ul>
-                    <button class="w-full py-2 bg-green-100 text-green-700 rounded-lg font-semibold hover:bg-green-200 transition-colors text-sm">
-                        Coming Soon
-                    </button>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Questions CTA -->
-        <div class="text-center bg-white rounded-2xl shadow-lg p-8">
-            <h3 class="text-2xl font-bold text-gray-900 mb-3">Have Questions?</h3>
-            <p class="text-gray-600 mb-6">Check out our comprehensive FAQ page or contact us directly.</p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="/faq.html" class="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                    View FAQs
-                </a>
-                <a href="/contact.html" class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:border-gray-400 transition-colors">
-                    Contact Us
-                </a>
-            </div>
-        </div>
-
     </div>
-
+    
     <div id="footer-placeholder"></div>
 
 <script>
@@ -311,109 +87,113 @@
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxodHJndXRpcWhxYm55ZmtkYWtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQzODk5MzMsImV4cCI6MjA3OTk2NTkzM30._j4fSrw3ybuYgdqevI-Mj-UjnbGe8rvNEF0hqe2uKC0';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Initialize Stripe - Blue Belfry Inc. Account
-    const stripe = Stripe('pk_test_51ScQiZKcos9FHYDIBOsxzZqVLmAUKciOz1NQmOxanWd094hIUJQkyxuBCg7melWVFtwhn18xrCOE1zNkB7ZDUn5B00XrRv2Q08');
-
-    // NEW STRIPE PRICE IDs - Blue Belfry Inc. Account (CORRECT!)
-    const PRICE_IDS = {
-        'starter': 'price_1Scke5Kcos9FHYDIR4ezTO7D',
-        'professional': 'price_1SckepKcos9FHYDIM8FBfTWG',
-        'business': 'price_1SckgQKcos9FHYDIlqk2nRxz'
-    };
-
-    // Check if user is logged in
-    async function checkAuth() {
-        // Check if email passed via URL (from verification)
-        const urlParams = new URLSearchParams(window.location.search);
-        const emailFromUrl = urlParams.get('email');
+    // Check if already verified via email (from URL hash)
+    window.addEventListener('load', async () => {
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const accessToken = hashParams.get('access_token');
         
-        if (emailFromUrl) {
-            // Use email from URL (from verification flow)
-            console.log('✅ Using email from verification URL:', emailFromUrl);
-            return { email: emailFromUrl };
-        }
-        
-        // Fall back to getting user from session
-        const { data: { user }, error } = await supabase.auth.getUser();
-        
-        if (error || !user) {
-            window.location.href = '/login.html';
-            return null;
-        }
-        
-        console.log('✅ Using email from session:', user.email);
-        return user;
-    }
-
-    // Select a plan and start checkout
-    async function selectPlan(plan) {
-        const user = await checkAuth();
-        if (!user) return;
-
-        // Disable all buttons
-        const buttons = document.querySelectorAll('button');
-        buttons.forEach(btn => {
-            btn.disabled = true;
-            btn.textContent = 'Loading...';
-        });
-
-        try {
-            const priceId = PRICE_IDS[plan];
+        if (accessToken) {
+            // User clicked email link - mark as verified
+            const { data: { user } } = await supabase.auth.getUser(accessToken);
             
-            const response = await fetch('/api/create-checkout', {
+            if (user) {
+                // Update customer record as verified
+                const { error } = await supabase
+                    .from('customers')
+                    .update({ is_verified: true })
+                    .eq('email', user.email);
+                
+                if (!error) {
+                    // Show success and redirect
+                    document.getElementById('successMessage').classList.remove('hidden');
+                    
+                    console.log('✅ Email verified user:', user.email);
+                    
+                    // Pass email to checkout via URL parameter
+                    setTimeout(() => {
+                        window.location.href = `/checkout.html?email=${encodeURIComponent(user.email)}`;
+                    }, 2000);
+                }
+            }
+        }
+    });
+
+    // Handle SMS code verification
+    document.getElementById('verifyForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const code = document.getElementById('verificationCode').value;
+        const errorDiv = document.getElementById('errorMessage');
+        const successDiv = document.getElementById('successMessage');
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        
+        errorDiv.classList.add('hidden');
+        successDiv.classList.add('hidden');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Verifying...';
+        
+        try {
+            // Call verification API
+            const response = await fetch('/api/verify-sms.js', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    email: user.email,
-                    priceId: priceId
+                body: JSON.stringify({ 
+                    code: code,
+                    phoneNumber: sessionStorage.getItem('verificationPhone')
                 })
             });
-
+            
             const data = await response.json();
-
-            if (data.url) {
-                window.location.href = data.url;
-            } else {
-                throw new Error('No checkout URL received');
+            
+            if (!response.ok) {
+                errorDiv.textContent = data.error || 'Invalid or expired code. Please try again.';
+                errorDiv.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Verify Code';
+                return;
             }
+            
+            // Success!
+            successDiv.classList.remove('hidden');
+            submitBtn.textContent = 'Verified! ✓';
+            
+            // Get the logged-in user's email (they just signed up and are logged in)
+            const { data: { user }, error: userError } = await supabase.auth.getUser();
+            
+            if (userError || !user) {
+                console.error('Could not get logged-in user:', userError);
+                errorDiv.textContent = 'Verification successful but session error. Please log in again.';
+                errorDiv.classList.remove('hidden');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Verify Code';
+                return;
+            }
+            
+            console.log('✅ Verified user email from session:', user.email);
+            
+            // Pass email to checkout via URL parameter (ensures correct email is used)
+            setTimeout(() => {
+                window.location.href = `/checkout.html?email=${encodeURIComponent(user.email)}`;
+            }, 2000);
+            
         } catch (error) {
-            console.error('Checkout error:', error);
-            alert('Failed to start checkout. Please try again.');
-            
-            // Re-enable buttons
-            buttons.forEach(btn => {
-                btn.disabled = false;
-            });
-            
-            // Restore button text
-            document.querySelectorAll('button').forEach((btn, idx) => {
-                const plans = ['Starter', 'Professional', 'Business'];
-                btn.textContent = `Select ${plans[idx]} Plan`;
-            });
+            console.error('Verification error:', error);
+            errorDiv.textContent = 'Verification failed. Please try again.';
+            errorDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Verify Code';
         }
-    }
-
-    // Initialize
-    checkAuth();
+    });
+    
+    // Auto-format code input (only numbers)
+    document.getElementById('verificationCode').addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/\D/g, '');
+    });
 </script>
 
-    <!-- Header Loader -->
-    <script>
-        fetch('/header.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-                // Initialize mobile menu after header loads
-                document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-                    const menu = document.getElementById('mobile-menu');
-                    menu.classList.toggle('hidden');
-                });
-            });
-    </script>
-
-    <!-- Footer Loader -->
+<!-- Footer Loader -->
     <script>
         fetch('/footer.html')
             .then(response => response.text())
@@ -421,6 +201,6 @@
                 document.getElementById('footer-placeholder').innerHTML = data;
             });
     </script>
-    
+
 </body>
 </html>
