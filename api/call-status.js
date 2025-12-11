@@ -52,11 +52,12 @@ export default async function handler(req, res) {
             
             await twilioClient.messages.create({
                 messagingServiceSid: 'MG0f9ea89c8fe16f24201ac16de37d0c45', // A2P Messaging Service
+                from: To, // Send from the specific number that received the call
                 to: callerNumber, // To the person who called
                 body: clientMessage
             });
             
-            console.log('✅ Auto-reply sent to caller:', callerNumber);
+            console.log('✅ Auto-reply sent to caller:', callerNumber, 'from:', To);
 
             // MESSAGE 2: Notification to BUSINESS OWNER
             const ownerMessage = customer.owner_notification_message || 
@@ -64,11 +65,12 @@ export default async function handler(req, res) {
             
             await twilioClient.messages.create({
                 messagingServiceSid: 'MG0f9ea89c8fe16f24201ac16de37d0c45', // A2P Messaging Service
+                from: To, // Send from the specific number that received the call
                 to: customer.user_phone_number, // To business owner
                 body: ownerMessage
             });
             
-            console.log('✅ Notification sent to business owner:', customer.user_phone_number);
+            console.log('✅ Notification sent to business owner:', customer.user_phone_number, 'from:', To);
         }
 
         return res.status(200).send('OK');
