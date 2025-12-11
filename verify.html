@@ -106,6 +106,12 @@
                 if (!error) {
                     // Show success and redirect
                     document.getElementById('successMessage').classList.remove('hidden');
+                    
+                    // Refresh session before redirect
+                    await supabase.auth.refreshSession();
+                    const { data: { user: refreshedUser } } = await supabase.auth.getUser();
+                    console.log('✅ Email verified user:', refreshedUser?.email);
+                    
                     setTimeout(() => {
                         window.location.href = '/checkout.html';
                     }, 2000);
@@ -154,6 +160,11 @@
             // Success!
             successDiv.classList.remove('hidden');
             submitBtn.textContent = 'Verified! ✓';
+            
+            // Refresh Supabase session to ensure we have the correct user
+            await supabase.auth.refreshSession();
+            const { data: { user } } = await supabase.auth.getUser();
+            console.log('✅ Verified user session:', user?.email);
             
             // Redirect to checkout after 2 seconds
             setTimeout(() => {
