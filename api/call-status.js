@@ -6,6 +6,9 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
 const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
 
+// A2P Messaging Service SID
+const MESSAGING_SERVICE_SID = 'MG0f9ea89c8fe16f24201ac16de37d0c45';
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
@@ -23,7 +26,7 @@ export default async function handler(req, res) {
         // Only send SMS when call is completed (missed)
         if (CallStatus === 'completed' || CallStatus === 'no-answer') {
             
-            // The ACTUAL caller's number - prioritize From since that's who initiated
+            // The ACTUAL caller's number
             const callerNumber = From;
             
             console.log('Identified caller as:', callerNumber);
@@ -51,9 +54,9 @@ export default async function handler(req, res) {
                 `Thanks for calling ${customer.business_name || 'us'}! We missed your call but will get back to you ASAP.`;
             
             await twilioClient.messages.create({
-                messagingServiceSid: 'MG0f9ea89c8fe16f24201ac16de37d0c45', // A2P Messaging Service
-                from: To, // Send from the specific number that received the call
-                to: callerNumber, // To the person who called
+                messagingServiceSid: MESSAGING_SERVICE_SID,
+                from: To, // Send from the customer's Twilio number (now in Sender Pool)
+                to: callerNumber,
                 body: clientMessage
             });
             
@@ -64,9 +67,9 @@ export default async function handler(req, res) {
                 `New missed call from ${callerNumber}`;
             
             await twilioClient.messages.create({
-                messagingServiceSid: 'MG0f9ea89c8fe16f24201ac16de37d0c45', // A2P Messaging Service
-                from: To, // Send from the specific number that received the call
-                to: customer.user_phone_number, // To business owner
+                messagingServiceSid: MESSAGING_SERVICE_SID,
+                from: To, // Send from the customer's Twilio number
+                to: customer.user_phone_number,
                 body: ownerMessage
             });
             
