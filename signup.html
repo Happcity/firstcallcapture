@@ -248,7 +248,8 @@
             // Don't block signup if SMS fails
         }
 
-        // Store phone number for verification
+        // Store email and phone number for verification page
+        sessionStorage.setItem('signupEmail', email);
         sessionStorage.setItem('verificationPhone', phoneNumber);
         // Show success message
         successDiv.textContent = 'Account created! Check your email AND text message to verify your account.';
