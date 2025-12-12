@@ -8,6 +8,9 @@ const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
 const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
 
+// A2P Messaging Service SID
+const MESSAGING_SERVICE_SID = 'MG0f9ea89c8fe16f24201ac16de37d0c45';
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
@@ -86,18 +89,33 @@ export default async function handler(req, res) {
             const phoneNumberToBuy = availableNumbers[0].phoneNumber;
             console.log('Found available number:', phoneNumberToBuy);
 
-            // Purchase the number
-const purchasedNumber = await twilioClient.incomingPhoneNumbers.create({
-    phoneNumber: phoneNumberToBuy,
-    voiceUrl: 'https://www.firstcallcapture.com/api/voice-webhook',
-    voiceMethod: 'POST',
-    statusCallback: 'https://www.firstcallcapture.com/api/call-status',
-    statusCallbackMethod: 'POST',
-    // Connect to A2P Messaging Service (required for SMS)
-    messagingServiceSid: 'MG0f9ea89c8fe16f24201ac16de37d0c45'
-});
+            // Purchase the number with webhooks configured
+            const purchasedNumber = await twilioClient.incomingPhoneNumbers.create({
+                phoneNumber: phoneNumberToBuy,
+                voiceUrl: 'https://www.firstcallcapture.com/api/voice-webhook',
+                voiceMethod: 'POST',
+                statusCallback: 'https://www.firstcallcapture.com/api/call-status',
+                statusCallbackMethod: 'POST'
+            });
 
             console.log('Number purchased:', purchasedNumber.phoneNumber);
+            console.log('Number SID:', purchasedNumber.sid);
+
+            // ADD NUMBER TO A2P MESSAGING SERVICE SENDER POOL
+            // This is required for A2P compliance - numbers must be in the pool to send SMS
+            try {
+                const phoneNumberSid = purchasedNumber.sid;
+                
+                await twilioClient.messaging.v1
+                    .services(MESSAGING_SERVICE_SID)
+                    .phoneNumbers
+                    .create({ phoneNumberSid: phoneNumberSid });
+                
+                console.log('✅ Number added to Messaging Service Sender Pool:', purchasedNumber.phoneNumber);
+            } catch (msgError) {
+                console.error('⚠️ Failed to add number to Messaging Service:', msgError.message);
+                // Don't fail the whole webhook - number is still purchased
+            }
 
             // Update customer with Twilio number AND Stripe IDs
             const { error: updateError } = await supabase
@@ -118,6 +136,7 @@ const purchasedNumber = await twilioClient.incomingPhoneNumbers.create({
             return res.status(200).json({ 
                 received: true,
                 provisioned: purchasedNumber.phoneNumber,
+                addedToMessagingService: true,
                 updated: customerEmail
             });
         }
