@@ -89,32 +89,64 @@
 
     // Check if already verified via email (from URL hash)
     window.addEventListener('load', async () => {
+        console.log('🔍 Checking for email verification token...');
+        console.log('URL hash:', window.location.hash);
+        
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const accessToken = hashParams.get('access_token');
+        const refreshToken = hashParams.get('refresh_token');
         
         if (accessToken) {
-            // User clicked email link - mark as verified
-            const { data: { user } } = await supabase.auth.getUser(accessToken);
+            console.log('✅ Found access token from email link');
             
-            if (user) {
+            try {
+                // Set the session using the tokens from the URL
+                const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+                    access_token: accessToken,
+                    refresh_token: refreshToken
+                });
+                
+                if (sessionError) {
+                    console.error('Session error:', sessionError);
+                    return;
+                }
+                
+                console.log('✅ Session set successfully');
+                
+                // Now get the user
+                const { data: { user }, error: userError } = await supabase.auth.getUser();
+                
+                if (userError || !user) {
+                    console.error('Could not get user:', userError);
+                    return;
+                }
+                
+                console.log('✅ Email verified user:', user.email);
+                
                 // Update customer record as verified
-                const { error } = await supabase
+                const { error: updateError } = await supabase
                     .from('customers')
                     .update({ is_verified: true })
                     .eq('email', user.email);
                 
-                if (!error) {
-                    // Show success and redirect
-                    document.getElementById('successMessage').classList.remove('hidden');
-                    
-                    console.log('✅ Email verified user:', user.email);
-                    
-                    // Pass email to checkout via URL parameter
-                    setTimeout(() => {
-                        window.location.href = `/checkout.html?email=${encodeURIComponent(user.email)}`;
-                    }, 2000);
+                if (updateError) {
+                    console.error('Update error:', updateError);
                 }
+                
+                // Show success and redirect
+                document.getElementById('successMessage').classList.remove('hidden');
+                
+                // Redirect to checkout with email in URL
+                setTimeout(() => {
+                    console.log('🚀 Redirecting to checkout with email:', user.email);
+                    window.location.href = `/checkout.html?email=${encodeURIComponent(user.email)}`;
+                }, 2000);
+                
+            } catch (err) {
+                console.error('Email verification error:', err);
             }
+        } else {
+            console.log('ℹ️ No email token - waiting for SMS verification');
         }
     });
 
@@ -132,6 +164,18 @@
         submitBtn.disabled = true;
         submitBtn.textContent = 'Verifying...';
         
+        // Get the phone number from sessionStorage
+        const phoneNumber = sessionStorage.getItem('verificationPhone');
+        console.log('📱 Phone from sessionStorage:', phoneNumber);
+        
+        if (!phoneNumber) {
+            errorDiv.textContent = 'Phone number not found. Please go back and sign up again.';
+            errorDiv.classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Verify Code';
+            return;
+        }
+        
         try {
             // Call verification API
             const response = await fetch('/api/verify-sms.js', {
@@ -141,7 +185,7 @@
                 },
                 body: JSON.stringify({ 
                     code: code,
-                    phoneNumber: sessionStorage.getItem('verificationPhone')
+                    phoneNumber: phoneNumber
                 })
             });
             
@@ -159,24 +203,50 @@
             successDiv.classList.remove('hidden');
             submitBtn.textContent = 'Verified! ✓';
             
-            // Get the logged-in user's email (they just signed up and are logged in)
-            const { data: { user }, error: userError } = await supabase.auth.getUser();
+            // Get the email from sessionStorage (set during signup)
+            const signupEmail = sessionStorage.getItem('signupEmail');
+            console.log('📧 Email from sessionStorage:', signupEmail);
             
-            if (userError || !user) {
-                console.error('Could not get logged-in user:', userError);
-                errorDiv.textContent = 'Verification successful but session error. Please log in again.';
-                errorDiv.classList.remove('hidden');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Verify Code';
-                return;
+            if (signupEmail) {
+                // Use email from sessionStorage
+                console.log('✅ Using signup email:', signupEmail);
+                setTimeout(() => {
+                    window.location.href = `/checkout.html?email=${encodeURIComponent(signupEmail)}`;
+                }, 2000);
+            } else {
+                // Fallback: Try to get from Supabase session
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                if (user && user.email) {
+                    console.log('✅ Using session email:', user.email);
+                    setTimeout(() => {
+                        window.location.href = `/checkout.html?email=${encodeURIComponent(user.email)}`;
+                    }, 2000);
+                } else {
+                    // Last resort: Look up by phone in database
+                    console.log('🔍 Looking up customer by phone...');
+                    const { data: customer } = await supabase
+                        .from('customers')
+                        .select('email')
+                        .eq('user_phone_number', phoneNumber)
+                        .single();
+                    
+                    if (customer && customer.email) {
+                        console.log('✅ Found email by phone:', customer.email);
+                        setTimeout(() => {
+                            window.location.href = `/checkout.html?email=${encodeURIComponent(customer.email)}`;
+                        }, 2000);
+                    } else {
+                        // Give up - redirect to login
+                        console.log('⚠️ Could not find email, redirecting to login');
+                        errorDiv.textContent = 'Verification successful! Please log in to continue.';
+                        errorDiv.classList.remove('hidden');
+                        setTimeout(() => {
+                            window.location.href = '/login.html';
+                        }, 2000);
+                    }
+                }
             }
-            
-            console.log('✅ Verified user email from session:', user.email);
-            
-            // Pass email to checkout via URL parameter (ensures correct email is used)
-            setTimeout(() => {
-                window.location.href = `/checkout.html?email=${encodeURIComponent(user.email)}`;
-            }, 2000);
             
         } catch (error) {
             console.error('Verification error:', error);
